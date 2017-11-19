@@ -9,6 +9,22 @@
 	<title>
 		Thinkful Tube App
 	</title>
+	<link 
+		rel="stylesheet" 
+		href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.min.css"
+		>
+    <link 
+    	rel="stylesheet" 
+    	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    	>
+    <link 
+    	rel="stylesheet"
+    	href="https://fonts.googleapis.com/css?family=Roboto|Slabo+27px" 
+    	> 
+    <link 
+    	rel="stylesheet" 
+    	href="index.css"
+    	>
 </head>
 <body>
 	<header>
@@ -19,18 +35,20 @@
 			The coolest implementation
 		</h2>
 	</header>
-	<!-- JS from here -->
+	<!-- JS from here. Each Id represents an insertion point -->
 	<nav>
-		<form >
+		<form id="js-search-form">
 			<legend>
 				Search
 			</legend>
 			<label 
 				for="top-search"
 				>
-				
+				Search query terms accumulate here
 			</label>
-			<!-- Search query terms accumulate here -->
+			<h1>
+				
+			</h1>
 			<input 
 				type="search" 
 				name="top-search" 
@@ -38,22 +56,26 @@
 				>
 		</form>
 	</nav>
-	<main>
+	<main id="js-main">
 		<article>
 			<figure>
+				<img 
+					src="" 
+					alt=""
+					>
 				<figcaption>
-					
+					Thumbnail
 				</figcaption>
 				<iframe 
 					src="" 
 					frameborder="0"
 					>
-					
+					Insertion point for youtube video
 				</iframe>
 			</figure>
 		</article>
 	</main>
-	<aside>
+	<aside id="js-aside">
 		<h1>
 			I am a video title
 		</h1>
@@ -69,6 +91,17 @@
 			Copyright 2017 Alex Webb
 		</h1>
 	</footer>
-	
 </body>
+<script 
+	src="https://code.jquery.com/jquery-3.2.1.min.js"
+	></script>
+<script 
+	src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+	></script>
+<script 
+	src="jquery.ui.touch-punch.min.js"
+	></script>
+<script 
+	src="index.js"
+	></script>
 </html>
