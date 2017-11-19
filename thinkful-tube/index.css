@@ -8,3 +8,73 @@ html {
 *:after {
     box-sizing: inherit;
 }
+
+body {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+
+header, nav {
+    max-width: inherit;
+
+}
+
+form {
+    
+}
+
+main {
+    max-width: inherit;
+    width: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+article {
+    width: 300px;
+}
+
+article h1 {
+    font-size: 16px;
+    
+}
+
+figure {
+    width: 95%;
+    overflow: hidden;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+img {
+    height: 200px;
+}
+
+aside {
+    height: 25%;
+    background-color: magenta;
+    
+    position: fixed;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.aside-text {
+    height: 60%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.aside-buttons {
+    display: flex;
+    justify-content: center;
+}

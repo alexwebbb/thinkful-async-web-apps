@@ -2,20 +2,22 @@
 
 const YOUTUBE_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 
-function getDataFromApi( searchTerm, callback ) {
+function getDataFromApi( searchTerm, callback, pageToken = null ) {
     
     console.log('hello');
     
     const query = {
         part: 'snippet',
         q: `${searchTerm}`,
+        maxResults: 6,
+        nextPageToken: pageToken,
         key: 'AIzaSyCEO_Lc9GBl5vjSoGYq-BpXE3VS3x-XhIc'
     }
     $.getJSON(YOUTUBE_SEARCH_URL, query, callback);
 }
 
 
-function handleInput() {
+function handleInput( ) {
     
     
     $('#js-search-form').submit(function( event ) {
@@ -44,7 +46,6 @@ function returnArticle( item ) {
     const s = item.snippet;
     
     return `
-        
         <article>
 			<figure>
 				<img 
@@ -59,15 +60,8 @@ function returnArticle( item ) {
 					    ${s.description}
 					</p>
 				</figcaption>
-				<iframe 
-					src="" 
-					frameborder="0"
-					>
-					Insertion point for youtube video
-				</iframe>
 			</figure>
 		</article>
-        
     `;
 }
 
