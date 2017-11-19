@@ -31,6 +31,44 @@ function handleInput() {
 
 function renderResult( result ) {
     console.log(result);
+    
+    $('#js-main').html(
+        result.items.reduce(
+            (s, v) => s + returnArticle(v),
+            '')
+        );
+}
+
+function returnArticle( item ) {
+    
+    const s = item.snippet;
+    
+    return `
+        
+        <article>
+			<figure>
+				<img 
+					src="${s.thumbnails.medium.url}" 
+					alt="${s.description}"
+					>
+				<figcaption>
+					<h1>
+					    ${s.title}
+					</h1>
+					<p>
+					    ${s.description}
+					</p>
+				</figcaption>
+				<iframe 
+					src="" 
+					frameborder="0"
+					>
+					Insertion point for youtube video
+				</iframe>
+			</figure>
+		</article>
+        
+    `;
 }
 
 
