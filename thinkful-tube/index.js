@@ -2,9 +2,20 @@
 
 const YOUTUBE_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 
+const currentState = {
+    queryString: '',
+    queryResult: {}
+}
+
+function updateString( qString ) {
+    currentState.queryResult = qString
+}
+
+function updateResult( qResult ) {
+    currentState.queryResult = qResult;
+}
+
 function getDataFromApi( searchTerm, callback, pageToken = null ) {
-    
-    console.log('hello');
     
     const query = {
         part: 'snippet',
@@ -17,7 +28,7 @@ function getDataFromApi( searchTerm, callback, pageToken = null ) {
 }
 
 
-function handleInput( ) {
+function handleInput() {
     
     
     $('#js-search-form').submit(function( event ) {
@@ -25,7 +36,18 @@ function handleInput( ) {
         
         const field = $('#top-search');
         
+        updateString(field.val());
+        
         getDataFromApi(field.val(), renderResult);
+    });
+}
+
+function handleClick() {
+    
+    
+    $('.js-figure').click(function( event ) {
+        
+        console.log($(this).attr('data-item'));
     });
     
 }
@@ -34,11 +56,15 @@ function handleInput( ) {
 function renderResult( result ) {
     console.log(result);
     
+    updateResult(result);
+    
     $('#js-main').html(
         result.items.reduce(
             (s, v) => s + returnArticle(v),
             '')
         );
+        
+    handleClick();
 }
 
 function returnArticle( item ) {
@@ -47,7 +73,7 @@ function returnArticle( item ) {
     
     return `
         <article>
-			<figure>
+			<figure class="js-figure" data-item="${item.id.videoId}">
 				<img 
 					src="${s.thumbnails.medium.url}" 
 					alt="${s.description}"
@@ -56,9 +82,6 @@ function returnArticle( item ) {
 					<h1>
 					    ${s.title}
 					</h1>
-					<p>
-					    ${s.description}
-					</p>
 				</figcaption>
 			</figure>
 		</article>
@@ -69,6 +92,7 @@ function returnArticle( item ) {
 function main () {
     
     handleInput();
+    handleClick();
     
     
     

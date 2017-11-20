@@ -30,11 +30,12 @@ main {
     width: auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 article {
     width: 300px;
+    margin-top: 20px;
 }
 
 article h1 {
@@ -43,6 +44,7 @@ article h1 {
 }
 
 figure {
+    height: 300px;
     width: 95%;
     overflow: hidden;
     margin: 0;
@@ -110,4 +112,11 @@ aside {
     margin: 0 10px;
     display: flex;
     justify-content: center;
+}
+
+
+
+
+.highlight {
+    border: yellow solid 2px;
 }
