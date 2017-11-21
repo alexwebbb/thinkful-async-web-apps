@@ -9,15 +9,25 @@ var App = (function () {
         queryResult: {}
     };
     
-    const updateString = function( qString ) {
+    const _setString = function( qString ) {
         currentState.queryResult = qString;
     }
     
-    const updateResult = function( qResult ) {
+    const _setResult = function( qResult ) {
         currentState.queryResult = qResult;
     }
     
-    const getDataFromApi = function( searchTerm, callback, pageToken = null ) {
+    const _getEntry = function( qDataID ) {
+        const result = currentState.queryResult.items.find((e, i, a) => {
+            return e.id.videoId === qDataID;
+        });
+        
+        console.log(result);
+        
+        return result;
+    }
+    
+    const _getDataFromApi = function( searchTerm, callback, pageToken = null ) {
         
         const query = {
             part: 'snippet',
@@ -31,46 +41,7 @@ var App = (function () {
     }
     
     
-    const handleInput = function() {
-        
-        
-        $('#js-search-form').submit(function( event ) {
-            event.preventDefault();
-            
-            const field = $('#top-search');
-            
-            updateString(field.val());
-            
-            getDataFromApi(field.val(), renderResult);
-        });
-    }
-    
-    const handleClick = function() {
-        
-        
-        $('.js-figure').click(function( event ) {
-            
-            console.log($(this).attr('data-item'));
-        });
-        
-    }
-    
-    
-    const renderResult = function( result ) {
-        console.log(result);
-        
-        updateResult(result);
-        
-        $('#js-main').html(
-            result.items.reduce(
-                (s, v) => s + returnArticle(v),
-                '')
-            );
-            
-        handleClick();
-    }
-    
-    const returnArticle = function( item ) {
+    const _returnArticle = function( item ) {
         
         const s = item.snippet;
         
@@ -89,6 +60,44 @@ var App = (function () {
     			</figure>
     		</article>
         `;
+    }
+    
+    const _renderResult = function( result ) {
+        console.log(result);
+        
+        _setResult(result);
+        
+        $('#js-main').html(
+            result.items.reduce(
+                (s, v) => s + _returnArticle(v),
+                '')
+            );
+            
+        handleClick();
+    }
+    
+    const handleClick = function() {
+        
+        
+        $('.js-figure').click(function( event ) {
+            
+            _getEntry($(this).attr('data-item'));
+        });
+        
+    }
+    
+    const handleInput = function() {
+        
+        
+        $('#js-search-form').submit(function( event ) {
+            event.preventDefault();
+            
+            const field = $('#top-search');
+            
+            _setString(field.val());
+            
+            _getDataFromApi(field.val(), _renderResult);
+        });
     }
   
   return {
