@@ -6,7 +6,9 @@ var App = (function () {
     
     const currentState = {
         queryString: '',
-        queryResult: {}
+        queryResult: {},
+        currentPage: '',
+        previousPage: ''
     };
     
     const _setString = function( qString ) {
@@ -21,6 +23,17 @@ var App = (function () {
         const result = currentState.queryResult.items.find((e, i, a) => {
             return e.id.videoId === qDataID;
         });
+        
+        return result;
+    }
+    
+    const _getNextPageToken = function() {
+        
+        const result = '';
+        
+        if(currentState.queryResult.nextPageToken) {
+            result = currentState.queryResult.nextPageToken;
+        }
         
         return result;
     }
@@ -75,13 +88,19 @@ var App = (function () {
     				</p>
     			</section>
     			<section class="aside-buttons">
-    				<button>
+    				<button 
+    				    class="js-pagination" 
+    				    data-pagination="${_getNextPageToken()}"
+    				    >
     					Prev Page
     				</button>
     				<button>
     					Play
     				</button>
-    				<button>
+    				<button 
+    				    class="js-pagination" 
+    				    data-pagination="${_getNextPageToken()}"
+    				    >
     					Next Page
     				</button>
     			</section>	
@@ -100,7 +119,7 @@ var App = (function () {
                 '')
             );
             
-        handleClick();
+        _handleFigureClick();
     }
     
     const _renderDescription = function( item ) {
@@ -108,12 +127,27 @@ var App = (function () {
         $('#js-aside').html(_returnAside(item));
     }
     
-    const handleClick = function() {
+    const _handleFigureClick = function() {
         
         
         $('.js-figure').click(function( event ) {
             
+            $('.js-figure').removeClass('highlight');
+            
+            $(this).addClass('highlight');
+            
             _renderDescription(_getEntry($(this).attr('data-item')));
+        });
+        
+    }
+    
+    const _handlePaginationClick = function() {
+        
+        
+        $('.js-pagination').click(function( event ) {
+            
+            
+            _renderDescription(_getEntry($(this).attr('data-pagination')));
         });
         
     }

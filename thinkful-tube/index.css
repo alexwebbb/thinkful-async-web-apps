@@ -112,6 +112,14 @@ aside {
     margin: 0 10px;
     display: flex;
     justify-content: center;
+    
+    
+}
+
+.aside-buttons button {
+    border: 4px dashed darkseagreen;
+    background-color: aquamarine;
+    margin: 0 10px;
 }
 
 
@@ -119,4 +127,5 @@ aside {
 
 .highlight {
     border: yellow solid 2px;
+    background-color: lightgoldenrodyellow;
 }
