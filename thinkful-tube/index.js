@@ -16,7 +16,14 @@ var App = (function () {
     }
     
     const _setResult = function( qResult ) {
-        currentState.queryResult = qResult;
+        
+        const s = currentState;
+        
+        s.queryResult = qResult;
+        
+        if(!s.pages.includes(s.queryResult.nextPageToken)){
+            s.pages.push(s.queryResult.nextPageToken);
+        } 
     }
     
     const _getQueryString = function() {
@@ -39,20 +46,32 @@ var App = (function () {
     
     const _getNextPageToken = function() {
         
+        console.log(currentState.pages);
+        
+        if(currentState.pages[currentState.pageIndex + 1]) {
+            
+        } else {
+            
+            
+        }
+        
         return currentState.pages[currentState.pageIndex + 1];
         
     }
     
-    const _getDataFromApi = function( searchTerm, callback, pageToken = null ) {
+    const _getDataFromApi = function( searchTerm, callback, nextPageToken = null ) {
+        
+        
+        console.log(nextPageToken);
         
         const s = currentState;
         
-        if(pageToken === null) {
+        if(nextPageToken === null) {
             s.pageIndex = 0;
-        } else if (s.pages.includes(pageToken)) {
-            s.pageIndex = s.pages.indexOf(pageToken);
+        } else if (s.pages.includes(nextPageToken)) {
+            s.pageIndex = s.pages.indexOf(nextPageToken);
         } else {
-            s.pages.push(pageToken);
+            s.pages.push(nextPageToken);
             s.pageIndex++;
         }
         
@@ -61,7 +80,7 @@ var App = (function () {
             q: `${searchTerm}`,
             maxResults: 6,
             type: 'video',
-            nextPageToken: pageToken,
+            pageToken: nextPageToken,
             key: 'AIzaSyCEO_Lc9GBl5vjSoGYq-BpXE3VS3x-XhIc'
         };
         $.getJSON(YOUTUBE_SEARCH_URL, query, callback);
@@ -164,7 +183,7 @@ var App = (function () {
         
         $('.js-pagination').click(function( event ) {
             
-            console.log(currentState);
+            // console.log(currentState);
             _getDataFromApi(
                 _getQueryString(), 
                 _renderResult, 
