@@ -7,16 +7,20 @@ var App = (function () {
     const currentState = {
         queryString: '',
         queryResult: {},
-        currentPage: '',
-        previousPage: ''
+        pages: [''],
+        pageIndex: 0
     };
     
     const _setString = function( qString ) {
-        currentState.queryResult = qString;
+        currentState.queryString = qString;
     }
     
     const _setResult = function( qResult ) {
         currentState.queryResult = qResult;
+    }
+    
+    const _getQueryString = function() {
+        return currentState.queryString;
     }
     
     const _getEntry = function( qDataID ) {
@@ -27,18 +31,30 @@ var App = (function () {
         return result;
     }
     
+    const _getPrevPageToken = function() {
+        
+        return currentState.pages[currentState.pageIndex];
+        
+    }
+    
     const _getNextPageToken = function() {
         
-        const result = '';
+        return currentState.pages[currentState.pageIndex + 1];
         
-        if(currentState.queryResult.nextPageToken) {
-            result = currentState.queryResult.nextPageToken;
-        }
-        
-        return result;
     }
     
     const _getDataFromApi = function( searchTerm, callback, pageToken = null ) {
+        
+        const s = currentState;
+        
+        if(pageToken === null) {
+            s.pageIndex = 0;
+        } else if (s.pages.includes(pageToken)) {
+            s.pageIndex = s.pages.indexOf(pageToken);
+        } else {
+            s.pages.push(pageToken);
+            s.pageIndex++;
+        }
         
         const query = {
             part: 'snippet',
@@ -90,7 +106,7 @@ var App = (function () {
     			<section class="aside-buttons">
     				<button 
     				    class="js-pagination" 
-    				    data-pagination="${_getNextPageToken()}"
+    				    data-pagination="${_getPrevPageToken()}"
     				    >
     					Prev Page
     				</button>
@@ -125,6 +141,8 @@ var App = (function () {
     const _renderDescription = function( item ) {
         
         $('#js-aside').html(_returnAside(item));
+        
+        _handlePaginationClick();
     }
     
     const _handleFigureClick = function() {
@@ -146,8 +164,15 @@ var App = (function () {
         
         $('.js-pagination').click(function( event ) {
             
+            console.log(currentState);
+            _getDataFromApi(
+                _getQueryString(), 
+                _renderResult, 
+                $(this).attr('data-pagination')
+            );
             
-            _renderDescription(_getEntry($(this).attr('data-pagination')));
+            // need to supply a dummy description for initial state
+            // _renderDescription(_getEntry($(this).attr('data-pagination')));
         });
         
     }
