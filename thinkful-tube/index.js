@@ -22,8 +22,6 @@ var App = (function () {
             return e.id.videoId === qDataID;
         });
         
-        console.log(result);
-        
         return result;
     }
     
@@ -62,6 +60,35 @@ var App = (function () {
         `;
     }
     
+    const _returnAside = function( item ) {
+        
+        const s = item.snippet;
+        
+        return `
+            <section class="aside-container">
+    			<section class="aside-text">
+    				<h1>
+    					${s.title}
+    				</h1>
+    				<p>
+    				    ${s.description}
+    				</p>
+    			</section>
+    			<section class="aside-buttons">
+    				<button>
+    					Prev Page
+    				</button>
+    				<button>
+    					Play
+    				</button>
+    				<button>
+    					Next Page
+    				</button>
+    			</section>	
+    		</section>
+        `;
+    }
+    
     const _renderResult = function( result ) {
         console.log(result);
         
@@ -76,12 +103,17 @@ var App = (function () {
         handleClick();
     }
     
+    const _renderDescription = function( item ) {
+        
+        $('#js-aside').html(_returnAside(item));
+    }
+    
     const handleClick = function() {
         
         
         $('.js-figure').click(function( event ) {
             
-            _getEntry($(this).attr('data-item'));
+            _renderDescription(_getEntry($(this).attr('data-item')));
         });
         
     }
