@@ -11,6 +11,14 @@ var App = (function () {
         pageIndex: 0
     };
     
+    const defaultDescription = {
+        snippet: {
+            title: "Cool Youtube Browser",
+            description: "Make a search and click one of the results!"
+        }
+    }
+    
+    
     const _setString = function( qString ) {
         currentState.queryString = qString;
     }
@@ -40,7 +48,7 @@ var App = (function () {
     
     const _getPrevPageToken = function() {
         
-        return currentState.pages[currentState.pageIndex];
+        return currentState.pages[currentState.pageIndex - 1];
         
     }
     
@@ -48,12 +56,6 @@ var App = (function () {
         
         console.log(currentState.pages);
         
-        if(currentState.pages[currentState.pageIndex + 1]) {
-            
-        } else {
-            
-            
-        }
         
         return currentState.pages[currentState.pageIndex + 1];
         
@@ -110,6 +112,7 @@ var App = (function () {
     
     const _returnAside = function( item ) {
         
+        console.log(item);
         const s = item.snippet;
         
         return `
@@ -191,7 +194,7 @@ var App = (function () {
             );
             
             // need to supply a dummy description for initial state
-            // _renderDescription(_getEntry($(this).attr('data-pagination')));
+            _renderDescription(defaultDescription);
         });
         
     }
