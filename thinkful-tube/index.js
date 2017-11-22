@@ -29,6 +29,8 @@ var App = (function () {
         
         s.queryResult = qResult;
         
+        
+        
         if(!s.pages.includes(s.queryResult.nextPageToken)){
             s.pages.push(s.queryResult.nextPageToken);
         } 
@@ -54,7 +56,7 @@ var App = (function () {
     
     const _getNextPageToken = function() {
         
-        console.log(currentState.pages);
+        console.log(currentState);
         
         
         return currentState.pages[currentState.pageIndex + 1];
@@ -69,7 +71,7 @@ var App = (function () {
         const s = currentState;
         
         
-        // ahhh here is my problem. i can see I am not pushing if the token is not included
+
         if(nextPageToken === null) {
             s.pageIndex = 0;
         } else if (s.pages.includes(nextPageToken)) {
@@ -232,7 +234,7 @@ var App = (function () {
 function main () {
     
     App.handleInput();
-    App.renderDefault();
+    // App.renderDefault();
     
     return 0;
 }
