@@ -50,14 +50,20 @@ var App = (function () {
     
     const _getPrevPageToken = function() {
         
-        return currentState.pages[currentState.pageIndex - 1];
-        
+        if(currentState.pageIndex > 0) {
+            return currentState.pages[currentState.pageIndex - 1];
+        } else {
+            return currentState.pages[0];
+        }
     }
     
     const _getNextPageToken = function() {
         
-        return currentState.pages[currentState.pageIndex + 1];
-        
+        if(currentState.pageIndex < currentState.pages.length - 1) {
+            return currentState.pages[currentState.pageIndex + 1];
+        } else {
+            return currentState.pages[currentState.pages.length - 1]
+        }
     }
     
     const _getDataFromApi = function( searchTerm, callback, nextPageToken = null ) {
