@@ -68,6 +68,8 @@ var App = (function () {
         
         const s = currentState;
         
+        
+        // ahhh here is my problem. i can see I am not pushing if the token is not included
         if(nextPageToken === null) {
             s.pageIndex = 0;
         } else if (s.pages.includes(nextPageToken)) {
@@ -199,6 +201,10 @@ var App = (function () {
         
     }
     
+    const renderDefault = function () {
+        _renderDescription(defaultDescription);
+    }
+    
     const handleInput = function() {
         
         
@@ -214,7 +220,8 @@ var App = (function () {
     }
   
   return {
-      handleInput: handleInput
+      handleInput: handleInput,
+      renderDefault: renderDefault
   };
 
 })();
@@ -225,6 +232,7 @@ var App = (function () {
 function main () {
     
     App.handleInput();
+    App.renderDefault();
     
     return 0;
 }
