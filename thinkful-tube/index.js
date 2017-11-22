@@ -56,21 +56,14 @@ var App = (function () {
     
     const _getNextPageToken = function() {
         
-        console.log(currentState);
-        
-        
         return currentState.pages[currentState.pageIndex + 1];
         
     }
     
     const _getDataFromApi = function( searchTerm, callback, nextPageToken = null ) {
         
-        
-        console.log(nextPageToken);
-        
         const s = currentState;
-        
-        
+         
 
         if(nextPageToken === null) {
             s.pageIndex = 0;
@@ -115,8 +108,7 @@ var App = (function () {
     }
     
     const _returnAside = function( item ) {
-        
-        console.log(item);
+
         const s = item.snippet;
         
         return `
@@ -154,6 +146,7 @@ var App = (function () {
         console.log(result);
         
         _setResult(result);
+        _renderDescription(defaultDescription);
         
         $('#js-main').html(
             result.items.reduce(
@@ -190,21 +183,15 @@ var App = (function () {
         
         $('.js-pagination').click(function( event ) {
             
-            // console.log(currentState);
             _getDataFromApi(
                 _getQueryString(), 
                 _renderResult, 
                 $(this).attr('data-pagination')
             );
             
-            // need to supply a dummy description for initial state
-            _renderDescription(defaultDescription);
+            
         });
         
-    }
-    
-    const renderDefault = function () {
-        _renderDescription(defaultDescription);
     }
     
     const handleInput = function() {
@@ -223,7 +210,6 @@ var App = (function () {
   
   return {
       handleInput: handleInput,
-      renderDefault: renderDefault
   };
 
 })();
@@ -234,7 +220,6 @@ var App = (function () {
 function main () {
     
     App.handleInput();
-    // App.renderDefault();
     
     return 0;
 }
