@@ -129,16 +129,18 @@ var App = (function () {
     			</section>
     			<section class="aside-buttons">
     				<button 
-    				    class="js-pagination" 
+    				    class="js-pagination button" 
     				    data-pagination="${_getPrevPageToken()}"
     				    >
     					Prev Page
     				</button>
-    				<button>
+    				<button
+                        class="button"
+                        >
     					Play
     				</button>
     				<button 
-    				    class="js-pagination" 
+    				    class="js-pagination button" 
     				    data-pagination="${_getNextPageToken()}"
     				    >
     					Next Page

@@ -1,6 +1,20 @@
 /* inherit box sizing */
+
 html {
     box-sizing: border-box;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fefcea+0,fefcea+26,ffffa3+65,f4b2ad+95&0+0,1+100 */
+    background: -moz-linear-gradient(left, rgba(254, 252, 234, 0) 0%, rgba(254, 252, 234, 0.26) 26%, rgba(255, 255, 163, 0.65) 65%, rgba(244, 178, 173, 0.95) 95%, rgba(244, 178, 173, 1) 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(254, 252, 234, 0) 0%, rgba(254, 252, 234, 0.26) 26%, rgba(255, 255, 163, 0.65) 65%, rgba(244, 178, 173, 0.95) 95%, rgba(244, 178, 173, 1) 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(254, 252, 234, 0) 0%, rgba(254, 252, 234, 0.26) 26%, rgba(255, 255, 163, 0.65) 65%, rgba(244, 178, 173, 0.95) 95%, rgba(244, 178, 173, 1) 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00fefcea', endColorstr='#f4b2ad', GradientType=1);
+    /* IE6-9 */
+    
+    font-family: 'Merriweather', serif;
+    
 }
 
 *,
@@ -13,17 +27,63 @@ body {
     max-width: 1000px;
     margin: 0 auto;
     height: 1200px;
-}
 
 
-header, nav {
-    max-width: inherit;
-
-}
-
-form {
     
+
 }
+
+h1 {
+    font-family: 'Open Sans', sans-serif;
+    text-shadow: white 2px 2px 6px;
+}
+
+
+
+header,
+nav {
+    max-width: inherit;
+}
+
+header {
+    color: #FF6347;
+}
+
+nav {
+    color: #FFD700;
+}
+
+fieldset {
+    border-color: #FF6347;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fefcea+0,f44838+100&0+0,1+100 */
+    background: -moz-linear-gradient(left, rgba(254, 252, 234, 0) 0%, rgba(244, 72, 56, 1) 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, rgba(254, 252, 234, 0) 0%, rgba(244, 72, 56, 1) 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, rgba(254, 252, 234, 0) 0%, rgba(244, 72, 56, 1) 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00fefcea', endColorstr='#f44838', GradientType=1);
+    /* IE6-9 */
+}
+
+label {
+    color: firebrick;
+    display: block;
+}
+
+input {
+    background-color: yellow;
+    color: firebrick;
+    display: block;
+}
+
+.pagination-counter-section {
+    float: right;
+}
+
+
+
 
 main {
     max-width: inherit;
@@ -40,7 +100,6 @@ article {
 
 article h1 {
     font-size: 16px;
-    
 }
 
 figure {
@@ -61,27 +120,27 @@ aside {
     /* change height with media query */
     height: 30%;
     background-color: magenta;
-    
+
     position: fixed;
     right: 0;
     left: 0;
     bottom: 0;
-    
+
     display: flex;
     flex-direction: row;
     justify-content: center;
 }
 
-@media (min-width: 60em) {
-    
+@media (min-width: 860px) {
+
     aside {
-        height: 15%;   
+        height: 18%;
     }
 }
 
 .aside-container {
     max-width: 1000px;
-    
+
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -90,36 +149,79 @@ aside {
 
 .aside-text {
     height: 60%;
-    max-width: 600px;
     /*margin: 0 auto;*/
-    
     display: flex;
     justify-content: center;
+    min-width: 300px;
+
+    flex: 4;
 }
 
 .aside-text h1 {
-    font-size: 16px;
+    font-size: 18px;
     color: yellow;
+    padding: 0 10px;
+    order: 1;
 }
 
 .aside-text p {
-    font-size: 12px;
+    font-size: 16px;
     color: white;
+    order: 4;
 }
 
 .aside-buttons {
     /* change button width with media query */
+    min-width: 300px;
     margin: 0 10px;
     display: flex;
     justify-content: center;
-    
-    
+    flex: 3;
 }
 
 .aside-buttons button {
-    border: 4px dashed darkseagreen;
-    background-color: aquamarine;
-    margin: 0 10px;
+    background-color: mistyrose;
+    color: #FF6347;
+    margin: 0 2px;
+    flex: 1;
+
+    border-radius: 2px;
+    padding: 0;
+
+}
+
+
+.button {
+  padding: 15px 25px;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+}
+
+.button:hover {
+    background-color: #3e8e41;
+    color: white;
+}
+
+.button:active {
+  background-color: #3e8e41;
+  color: white;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+
+
+footer {
+
+    font-size: 8px;
+    color: teal;
 }
 
 
