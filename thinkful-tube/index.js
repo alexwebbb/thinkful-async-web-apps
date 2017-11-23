@@ -155,6 +155,7 @@ var App = (function () {
         
         _setResult(result);
         _renderDescription(defaultDescription);
+        _renderPageNum();
         
         $('#js-main').html(
             result.items.reduce(
@@ -170,6 +171,12 @@ var App = (function () {
         $('#js-aside').html(_returnAside(item));
         
         _handlePaginationClick();
+    }
+
+    const _renderPageNum = function() {
+
+            $('#pagination-value').text(currentState.pageIndex + 1);
+
     }
     
     const _handleFigureClick = function() {
