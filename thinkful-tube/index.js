@@ -223,6 +223,7 @@ var App = (function() {
 
     const _YT_onPlayerStateChange = function(event) {
 
+        // this function can probably go
         let done = false;
 
         if (event.data == YT.PlayerState.PLAYING && !done) {
@@ -307,7 +308,7 @@ var App = (function() {
 
 
 function onYouTubeIframeAPIReady() {
-
+    // must be present for the script 
 }
 
 
