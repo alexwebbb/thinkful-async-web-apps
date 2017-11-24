@@ -3,34 +3,9 @@
 
 var App = (function() {
 
-
-    const createYoutubeScript = function() {
-
-        // 2. This code loads the IFrame Player API code asynchronously.
-        let tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        let firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     const YOUTUBE_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
+
+    let player;
 
     const currentState = {
         queryString: '',
@@ -100,7 +75,6 @@ var App = (function() {
     const _getDataFromApi = function(searchTerm, callback, nextPageToken = null) {
 
         const s = currentState;
-
 
         if (nextPageToken === null) {
             s.pageIndex = 0;
@@ -224,19 +198,19 @@ var App = (function() {
     const _YT_onPlayerStateChange = function(event) {
 
         // this function can probably go
-        let done = false;
-
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-            setTimeout(_YT_stopVideo, 6000);
-            done = true;
-        }
+        // let done = false;
+        // 
+        // if (event.data == YT.PlayerState.PLAYING && !done) {
+        //     setTimeout(_YT_stopVideo, 6000);
+        //     done = true;
+        // }
     }
 
     const _renderVideoPlayer = function(ID) {
         // initialize player
-        let player = new YT.Player('player', {
+        player = new YT.Player('player', {
             height: '390',
-            width: '640',
+            width: '100%',
             videoId: ID,
             events: {
                 'onReady': _YT_onPlayerReady,
@@ -280,8 +254,13 @@ var App = (function() {
 
         $('.js-play-button').click(function(event) {
 
-            console.log("play button pressed");
-            _renderVideoPlayer($(this).attr('data-playID'));
+
+            if(player === undefined) {
+                console.log("play button pressed");
+                _renderVideoPlayer($(this).attr('data-playID'));
+            } else {
+                player.loadVideoById($(this).attr('data-playID'));
+            }
         });
     }
 
@@ -299,6 +278,16 @@ var App = (function() {
         });
     }
 
+    const createYoutubeScript = function() {
+
+        // 2. This code loads the IFrame Player API code asynchronously.
+        let tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        let firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    }
+
     return {
         handleInput: handleInput,
         createYoutubeScript: createYoutubeScript
@@ -307,8 +296,8 @@ var App = (function() {
 })();
 
 
+// must be present for the youtbe embedded player to load
 function onYouTubeIframeAPIReady() {
-    // must be present for the script 
 }
 
 
