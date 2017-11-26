@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>D3: SVG bar chart with value labels (centered)</title>
+    <script type="text/javascript" src="d3/d3.v3.js"></script>
+    <style type="text/css">
+    	body {
+    		background-color: darkgreen;
+    	}
+    </style>
+</head>
+
+<body>
+    <script type="text/javascript">
+    //Width and height
+    var w = 500;
+    var h = 400;
+    var barPadding = 1;
+
+    var dataset = [
+        {
+            "elevation": 4350.96044921875,
+            "location": {
+                "lat": 36.578581,
+                "lng": -118.291994
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 3417.390380859375,
+            "location": {
+                "lat": 36.56720203514443,
+                "lng": -118.2414285134156
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 2398.221923828125,
+            "location": {
+                "lat": 36.55580172341986,
+                "lng": -118.1908779369536
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1736.190063476562,
+            "location": {
+                "lat": 36.54438007999819,
+                "lng": -118.1403422879322
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1441.71240234375,
+            "location": {
+                "lat": 36.53293712006728,
+                "lng": -118.0898215835989
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1107.118286132812,
+            "location": {
+                "lat": 36.52147285883098,
+                "lng": -118.0393158411305
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1087.062866210938,
+            "location": {
+                "lat": 36.50998731150898,
+                "lng": -117.9888250776326
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1085.132446289062,
+            "location": {
+                "lat": 36.49848049333682,
+                "lng": -117.9383493101406
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1091.025512695312,
+            "location": {
+                "lat": 36.48695241956572,
+                "lng": -117.8878885556188
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1232.193725585938,
+            "location": {
+                "lat": 36.47540310546255,
+                "lng": -117.837442830961
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1622.777954101562,
+            "location": {
+                "lat": 36.46383256630977,
+                "lng": -117.7870121529901
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 2204.022705078125,
+            "location": {
+                "lat": 36.45224081740531,
+                "lng": -117.7365965384584
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1724.670288085938,
+            "location": {
+                "lat": 36.44062787406256,
+                "lng": -117.6861960040476
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1633.60791015625,
+            "location": {
+                "lat": 36.42899375161019,
+                "lng": -117.6358105663685
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1418.451049804688,
+            "location": {
+                "lat": 36.41733846539222,
+                "lng": -117.5854402419616
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1258.886352539062,
+            "location": {
+                "lat": 36.40566203076781,
+                "lng": -117.5350850472965
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 493.3392944335938,
+            "location": {
+                "lat": 36.39396446311124,
+                "lng": -117.4847449987724
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 483.5977478027344,
+            "location": {
+                "lat": 36.38224577781185,
+                "lng": -117.4344201127177
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 496.4402465820312,
+            "location": {
+                "lat": 36.37050599027392,
+                "lng": -117.3841104053904
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 800.2818603515625,
+            "location": {
+                "lat": 36.35874511591667,
+                "lng": -117.3338158929779
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1370.810668945312,
+            "location": {
+                "lat": 36.34696317017409,
+                "lng": -117.283536591597
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1887.068359375,
+            "location": {
+                "lat": 36.33516016849492,
+                "lng": -117.2332725172942
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1597.0791015625,
+            "location": {
+                "lat": 36.32333612634259,
+                "lng": -117.1830236860454
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1728.079223632812,
+            "location": {
+                "lat": 36.31149105919511,
+                "lng": -117.132790113756
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 1970.682250976562,
+            "location": {
+                "lat": 36.299624982545,
+                "lng": -117.082571816261
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 2173.610595703125,
+            "location": {
+                "lat": 36.28773791189921,
+                "lng": -117.032368809325
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 890.7444458007812,
+            "location": {
+                "lat": 36.2758298627791,
+                "lng": -116.9821811086422
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": 201.1587371826172,
+            "location": {
+                "lat": 36.26390085072028,
+                "lng": -116.9320087298364
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": -80.47271728515625,
+            "location": {
+                "lat": 36.25195089127259,
+                "lng": -116.8818516884613
+            },
+            "resolution": 305.4064636230469
+        },
+        {
+            "elevation": -84.49005889892578,
+            "location": {
+                "lat": 36.23998,
+                "lng": -116.83171
+            },
+            "resolution": 305.4064636230469
+        }
+    ];
+
+    //Create SVG element
+    var svg = d3.select("body")
+        .append("svg")
+        .attr("width", w)
+        .attr("height", h);
+
+    svg.selectAll("rect")
+        .data(dataset)
+        .enter()
+        .append("rect")
+        .attr("x", function(d, i) {
+            return i * (w / dataset.length);
+        })
+        .attr("y", function(d) {
+            return h - (d['elevation'] / 12);
+        })
+        .attr("width", w / dataset.length - barPadding)
+        .attr("height", function(d) {
+            return d['elevation'] / 12;
+        })
+        .attr("fill", function(d) {
+            return "rgb(0, 0, " + (d['elevation'] / 12) + ")";
+        });
+
+    svg.selectAll("text")
+        .data(dataset)
+        .enter()
+        .append("text")
+        .text(function(d) {
+            return d['elevation'];
+        })
+        .attr("text-anchor", "middle")
+        .attr("x", function(d, i) {
+            return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+        })
+        .attr("y", function(d) {
+            return h - (d['elevation'] / 12) + 14;
+        })
+        .attr("font-family", "sans-serif")
+        .attr("font-size", "11px")
+        .attr("fill", "white");
+    </script>
+</body>
+
+</html>
