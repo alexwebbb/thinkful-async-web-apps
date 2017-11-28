@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="d3-3d.js"></script>
+<body>
+<svg width="960" height="500"></svg>
+<script>
+    var origin  = [480, 250], alpha = Math.PI/4, beta = 0.615472907, data = [], max = 4, min = -max, rad = Math.PI/180;
+    var svg     = d3.select('svg');
+    var color   = d3.scaleOrdinal(d3.schemeCategory10);
+    var rn      = function(min, max){ return Math.round(d3.randomUniform(min, max + 1)()); };
+    d3.range(-4, 5, 2).forEach(function(i){
+        var o = [
+            [ 3,      0      , i],
+            [ 2, rn(min, max), i],
+            [ 1, rn(min, max), i],
+            [ 0, rn(min, max), i],
+            [-1, rn(min, max), i],
+            [-2, rn(min, max), i],
+            [-3,      0      , i]
+        ];
+        data.push(o);
+    });
+
+    var _3d = d3._3d()
+        .scale(30)
+        .origin(origin)
+        .primitiveType('LINES_STRIP')
+        .rotateX(alpha)
+        .rotateY(beta);
+
+    var data3D = _3d(data);
+
+    function processData(data){
+
+        var linesStrip = svg.selectAll('path').data(data);
+
+        linesStrip
+            .enter()
+            .append('path')
+            .merge(linesStrip)
+            .attr('fill', 'none')
+            .attr('stroke', function(d, i){ return color(i); })
+            .attr('stroke-width', 2)
+            .sort(function(a, b){ return b[0].rotated.z - a[0].rotated.z; })
+            .attr('d', _3d.draw);
+
+            linesStrip.exit().remove();
+        }
+
+    processData(data3D);
+
+    setInterval(function(){
+        beta += rad;
+        processData(_3d.rotateY(beta)(data));
+    }, 40);
+</script>
+</body>
