@@ -88,7 +88,12 @@ function showNewRect(event) {
 // Get the data
 d3.json("data2.json", function(error, data) {
 
-    // Scale the range of the data
+    
+
+});
+
+function initGraph() {
+	// Scale the range of the data
     x.domain(d3.extent(data, function(d, i) { return i; }));
     y.domain([-500, d3.max(data, function(d) { return d.elevation; })]);
 
@@ -106,5 +111,25 @@ d3.json("data2.json", function(error, data) {
     // Add the Y Axis
     svg.append("g")
         .call(d3.axisLeft(y));
+}
 
-});
+function updateGraph() {
+	// Scale the range of the data
+    x.domain(d3.extent(data, function(d, i) { return i; }));
+    y.domain([-500, d3.max(data, function(d) { return d.elevation; })]);
+
+    // Add the valueline path.
+    svg.append("path")
+        .data([data])
+        .attr("class", "line")
+        .attr("d", valueline);
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    // Add the Y Axis
+    svg.append("g")
+        .call(d3.axisLeft(y));
+}
