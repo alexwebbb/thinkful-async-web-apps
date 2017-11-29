@@ -71,7 +71,7 @@ function initMap() {
     rectangle.addListener('bounds_changed', showNewRect);
 
     // Define an info window on the map.
-    infoWindow = new google.maps.InfoWindow();
+    // infoWindow = new google.maps.InfoWindow();
 }
 // Show the new coordinates for the rectangle in an info window.
 
@@ -79,22 +79,23 @@ function initMap() {
 function showNewRect(event) {
     let ne = rectangle.getBounds().getNorthEast();
     let sw = rectangle.getBounds().getSouthWest();
-    console.log(rectangle.getBounds());
 
-    let contentString = '<b>Rectangle moved.</b><br>' +
-        'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
-        'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
+//    let contentString = '<b>Rectangle moved.</b><br>' +
+//        'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
+//        'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
+//
+//    // Set the info window's content and position.
+//    infoWindow.setContent(contentString);
+//    infoWindow.setPosition(ne);
+//
+//    infoWindow.open(map);
+//
 
-    // Set the info window's content and position.
-    infoWindow.setContent(contentString);
-    infoWindow.setPosition(ne);
-
-    infoWindow.open(map);
 
     // construct path request
     let path = [
         { lat: ne.lat(), lng: sw.lng() },
-        { lat: sw.lat(), lng: ne.lng() }
+        { lat: ne.lat(), lng: ne.lng() }
     ];
 
     // initiate path request
