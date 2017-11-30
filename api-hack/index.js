@@ -25,6 +25,12 @@ let margin = { top: 30, right: 20, bottom: 30, left: 50 },
 let x = d3.scaleLinear().range([0, width]);
 let y = d3.scaleLinear().range([height, 0]);
 
+// Define the fill area
+var area = d3.area()
+    .x(function(d, i) { return x(i); })
+    .y0(height)
+    .y1(function(d) { return y(d.elevation); });
+
 // Define the line
 let valueline = d3.line()
     .x(function(d, i) { return x(i); })
@@ -117,6 +123,8 @@ function updateElevation(bounds) {
         }, function(data, status) {
             dataObject[i] = data;
 
+            console.log(status);
+
             // make sure to only call the graph function when the data update is complete
             if (i === (rowNum - 1)) {
                 !isInitialized ? initGraph(dataObject) : updateGraph(dataObject);
@@ -132,7 +140,7 @@ function initGraph(data) {
 
     isInitialized = true;
 
-    colorScale = d3.interpolateRgb("red", "blue");
+    colorScale = d3.interpolateRgb("blue", "red");
 
     let flatData = [].concat.apply([], data);
     // Scale the range of the data
@@ -143,6 +151,15 @@ function initGraph(data) {
     ]);
 
     for (var i = 0; i < data.length; i++) {
+
+        // add the area
+        svg.append("path")
+            .data([data[i]])
+            .attr("class", `area area${i + 1}`)
+            .style("fill", `${colorScale((i + 1) / data.length)}`)
+            .attr("d", area(data[i]));
+
+        // add the line
         svg.append("path")
             .data([data[i]])
             .attr("class", `line line${i + 1}`)
@@ -179,6 +196,12 @@ function updateGraph(data) {
     // Add the valueline path.
 
     for (var i = 0; i < data.length; i++) {
+
+        // add the area
+        svg.select(`.area${i + 1}`)
+            .duration(750)
+            .attr("d", area(data[i]));
+
         svg.select(`.line${i + 1}`)
             .duration(750)
             .attr("d", valueline(data[i]));

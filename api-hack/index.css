@@ -21,7 +21,10 @@ body {
 }
 
 .line { 
-    stroke: steelblue;
     stroke-width: 2;
     fill: none;
+}
+
+.area {
+    fill-opacity: 0.7;
 }
