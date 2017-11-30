@@ -5,7 +5,9 @@
 
 ///// Data Object
 
-let dataObject = [];
+let dataObject = [],
+    isInitialized = false,
+    colorScale;
 
 ///// Google Maps
 
@@ -103,10 +105,10 @@ function updateElevation(bounds) {
         // construct path
         let path = [{
             lat: b.north + (interval * i),
-            lng: b.east
+            lng: b.west
         }, {
             lat: b.north + (interval * i),
-            lng: b.west
+            lng: b.east
         }];
 
         elevator.getElevationAlongPath({
@@ -114,28 +116,33 @@ function updateElevation(bounds) {
             'samples': 30
         }, function(data, status) {
             dataObject[i] = data;
+            if (i === (rowNum - 1)) {
+                !isInitialized ? initGraph(dataObject) : updateGraph(dataObject);
+            }
         });
     }
+
+
 }
 
 
 function initGraph(data) {
+
+    isInitialized = true;
+
+    colorScale = d3.interpolateRgb("red", "blue");
+
     // Scale the range of the data
     x.domain(d3.extent(data[0], function(d, i) { return i; }));
     y.domain([-100, d3.max(data[0], function(d) { return d.elevation; })]);
 
-    // Add the valueline path.
-    svg.append("path")
-        .data([data[0]])
-        .attr("class", "line line1")
-        .style("stroke", "red")
-        .attr("d", valueline(data[0]));
-
-    svg.append("path")
-        .data([data[1]])
-        .attr("class", "line line2")
-        .style("stroke", "green")
-        .attr("d", valueline(data[1]));
+    for (var i = 0; i < data.length; i++) {
+        svg.append("path")
+            .data([data[i]])
+            .attr("class", `line line${i + 1}`)
+            .style("stroke", `${colorScale((i + 1) / data.length)}`)
+            .attr("d", valueline(data[i]));
+    }
 
     // Add the X Axis
     svg.append("g")
@@ -158,13 +165,12 @@ function updateGraph(data) {
 
     let svg = d3.select("#graph-container").transition();
     // Add the valueline path.
-    svg.select(".line1")
-        .duration(750)
-        .attr("d", valueline(data[0]));
 
-    svg.select(".line2")
-        .duration(750)
-        .attr("d", valueline(data[1]));
+    for (var i = 0; i < data.length; i++) {
+        svg.select(`.line${i + 1}`)
+            .duration(750)
+            .attr("d", valueline(data[i]));
+    }
 
     // Add the X Axis
     svg.select(".x.axis")
