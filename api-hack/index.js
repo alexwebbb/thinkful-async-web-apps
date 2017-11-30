@@ -82,15 +82,43 @@ function showNewRect(event) {
 
 
     // construct path request
-    let path = [
-        { lat: ne.lat(), lng: sw.lng() },
-        { lat: ne.lat(), lng: ne.lng() }
-    ];
+    let bounds = {
+        north: ne.lat(),
+        west: sw.lng(),
+        south: sw.lat(),
+        east: ne.lng()
+    };
 
-    let path2 = [
-        { lat: sw.lat(), lng: sw.lng() },
-        { lat: sw.lat(), lng: ne.lng() }
-    ];
+    updateElevation(bounds);
+}
+
+
+function updateElevation(bounds) {
+
+
+    let b = bounds;
+    let rowNum = 5;
+
+    let interval = b.south - b.north;
+
+    for (let i = 0; i < rowNum; i++) {
+
+        // construct path
+        let path = [{
+            lat: north + (interval * i),
+            lng: b.east
+        }, {
+            lat: north + (interval * i),
+            lng: b.west
+        }]
+
+        elevator.getElevationAlongPath({
+            'path': path,
+            'samples': 30
+        }, function(data, status) {
+            dataObject[i] = data;
+        });
+    }
 
     // initiate path request
     elevator.getElevationAlongPath({
@@ -102,7 +130,6 @@ function showNewRect(event) {
         'path': path2,
         'samples': 30
     }, updateData2);
-
 
 }
 
