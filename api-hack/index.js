@@ -116,6 +116,8 @@ function updateElevation(bounds) {
             'samples': 30
         }, function(data, status) {
             dataObject[i] = data;
+
+            // make sure to only call the graph function when the data update is complete
             if (i === (rowNum - 1)) {
                 !isInitialized ? initGraph(dataObject) : updateGraph(dataObject);
             }
@@ -135,7 +137,10 @@ function initGraph(data) {
     let flatData = [].concat.apply([], data);
     // Scale the range of the data
     x.domain(d3.extent(data[0], function(d, i) { return i; }));
-    y.domain([-100, d3.max(flatData, function(d) { return d.elevation; })]);
+    y.domain([
+        d3.min(flatData, function(d) { return d.elevation; }),
+        d3.max(flatData, function(d) { return d.elevation; })
+    ]);
 
     for (var i = 0; i < data.length; i++) {
         svg.append("path")
@@ -164,7 +169,10 @@ function updateGraph(data) {
     let flatData = [].concat.apply([], data);
     // Scale the range of the data
     x.domain(d3.extent(data[0], function(d, i) { return i; }));
-    y.domain([-100, d3.max(flatData, function(d) { return d.elevation; })]);
+    y.domain([
+        d3.min(flatData, function(d) { return d.elevation; }),
+        d3.max(flatData, function(d) { return d.elevation; })
+    ]);
 
 
     let svg = d3.select("#graph-container").transition();
