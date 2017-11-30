@@ -132,9 +132,10 @@ function initGraph(data) {
 
     colorScale = d3.interpolateRgb("red", "blue");
 
+    let flatData = [].concat.apply([], data);
     // Scale the range of the data
     x.domain(d3.extent(data[0], function(d, i) { return i; }));
-    y.domain([-100, d3.max(data[0], function(d) { return d.elevation; })]);
+    y.domain([-100, d3.max(flatData, function(d) { return d.elevation; })]);
 
     for (var i = 0; i < data.length; i++) {
         svg.append("path")
@@ -158,9 +159,12 @@ function initGraph(data) {
 
 
 function updateGraph(data) {
+
+
+    let flatData = [].concat.apply([], data);
     // Scale the range of the data
     x.domain(d3.extent(data[0], function(d, i) { return i; }));
-    y.domain([-100, d3.max(data[0], function(d) { return d.elevation; })]);
+    y.domain([-100, d3.max(flatData, function(d) { return d.elevation; })]);
 
 
     let svg = d3.select("#graph-container").transition();
