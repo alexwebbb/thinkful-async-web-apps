@@ -9,10 +9,7 @@ let dataObject = [];
 
 ///// Google Maps
 
-let rectangle;
-let map;
-let elevator;
-let infoWindow;
+let rectangle, map, elevator, infoWindow;
 
 
 ///// D3
@@ -99,18 +96,18 @@ function updateElevation(bounds) {
     let b = bounds;
     let rowNum = 5;
 
-    let interval = b.south - b.north;
+    let interval = (b.south - b.north) / (rowNum - 1);
 
     for (let i = 0; i < rowNum; i++) {
 
         // construct path
         let path = [{
-            lat: north + (interval * i),
+            lat: b.north + (interval * i),
             lng: b.east
         }, {
-            lat: north + (interval * i),
+            lat: b.north + (interval * i),
             lng: b.west
-        }]
+        }];
 
         elevator.getElevationAlongPath({
             'path': path,
@@ -119,40 +116,8 @@ function updateElevation(bounds) {
             dataObject[i] = data;
         });
     }
-
-    // initiate path request
-    elevator.getElevationAlongPath({
-        'path': path,
-        'samples': 30
-    }, updateData);
-
-    elevator.getElevationAlongPath({
-        'path': path2,
-        'samples': 30
-    }, updateData2);
-
 }
 
-
-// Get the data....... this will go away
-d3.json("data2.json", function(error, dataReturn) {
-
-    dataObject[0] = dataReturn;
-    dataObject[1] = dataReturn;
-    console.log(dataObject);
-    initGraph(dataObject);
-
-});
-
-
-function updateData(data, status) {
-    dataObject[0] = data;
-}
-
-function updateData2(data, status) {
-    dataObject[1] = data;
-    updateGraph(dataObject);
-}
 
 function initGraph(data) {
     // Scale the range of the data
