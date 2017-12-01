@@ -66,13 +66,28 @@ function distance(lat1, lon1, lat2, lon2, unit = "K") {
     return dist
 }
 
+function getRectBounds() {
+    return {
+        north: rectangle.getBounds().getNorthEast().lat(),
+        west: rectangle.getBounds().getSouthWest().lng(),
+        south: rectangle.getBounds().getSouthWest().lat(),
+        east: rectangle.getBounds().getNorthEast().lng()
+    };
+}
+
+function getCenter(bounds) {
+    return {
+        lat: bounds.north - ((bounds.north - bounds.south) / 2),
+        lng: bounds.east - ((bounds.east - bounds.west) / 2)
+    };
+}
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 44.5452, lng: -78.5389 },
         zoom: 9
     });
     elevator = new google.maps.ElevationService;
-
 
     let b = {
         north: 44.599,
@@ -85,7 +100,9 @@ function initMap() {
     rectangle = new google.maps.Rectangle({
         bounds: b,
         editable: true,
-        draggable: true
+        draggable: true,
+        strokeColor: 'DarkSlateGray',
+        fillColor: 'SpringGreen'
     });
 
     rectangle.setMap(map);
@@ -97,16 +114,14 @@ function initMap() {
     }
 
     boxMarker = new google.maps.Marker({
-        position: {
-            lat: b.north - ((b.north - b.south) / 2),
-            lng: b.east - ((b.east - b.west) / 2)
-        },
+        position: getCenter(b),
         map: map,
         icon: boxImage
     });
 
 
-    // Add an event listener on the rectangle.
+    // Add an event listener on the drag end event.
+    // for performance reasons, cant use 'bounds changed'
     rectangle.addListener('dragend', updateElevation);
 
     // Add an event listener on the rectangle for the icon.
@@ -117,29 +132,15 @@ function initMap() {
 
 function setIconPosition(event) {
 
-    // construct path request
-    let north = rectangle.getBounds().getNorthEast().lat(),
-        west = rectangle.getBounds().getSouthWest().lng(),
-        south = rectangle.getBounds().getSouthWest().lat(),
-        east = rectangle.getBounds().getNorthEast().lng();
+    let b = getRectBounds(),
+        center = getCenter(b);
 
-
-    let center = {
-        lat: north - ((north - south) / 2),
-        lng: east - ((east - west) / 2)
-    }
-
-    boxMarker.setPosition(new google.maps.LatLng(center.lat, center.lng));
+    boxMarker.setPosition(center);
 }
 
 function updateElevation(event) {
 
-    let b = {
-            north: rectangle.getBounds().getNorthEast().lat(),
-            west: rectangle.getBounds().getSouthWest().lng(),
-            south: rectangle.getBounds().getSouthWest().lat(),
-            east: rectangle.getBounds().getNorthEast().lng()
-        },
+    let b = getRectBounds(),
         interval = (b.south - b.north) / (rowNum - 1);
 
     for (let i = 0; i < rowNum; i++) {
@@ -217,6 +218,7 @@ function initGraph(data) {
         .attr("x", width / 2)
         .attr("y", height + margin.top)
         .style("text-anchor", "middle")
+        .attr("class", "axis-label")
         .text("Distance (meters)");
 
     // Add the Y Axis
@@ -231,6 +233,7 @@ function initGraph(data) {
         .attr("x", 0 - (height / 2))
         .attr("dy", "1em")
         .style("text-anchor", "middle")
+        .attr("class", "axis-label")
         .text("Elevation (meters)");
 
     // add the Y gridlines

@@ -11,6 +11,8 @@
 }
 
 
+
+
 /* Optional: Makes the sample page fill the window. */
 
 html,
@@ -20,7 +22,7 @@ body {
     padding: 0;
 }
 
-.line { 
+.line {
     stroke-width: 2;
     fill: none;
 }
@@ -29,13 +31,29 @@ body {
     fill-opacity: 0.7;
 }
 
+.axis line {
+    stroke: DarkSlateGray;
+}
+
+.axis path {
+    stroke: DarkSlateGray;
+}
+
+.axis text {
+    fill: DarkSlateGray;
+}
+
+.axis-label {
+    fill: Teal;
+}
+
 .grid line {
-stroke: darkgrey;
-stroke-opacity: 0.7;
-shape-rendering: crispEdges;
-stroke-dasharray: 3, 3;
+    stroke: darkgrey;
+    stroke-opacity: 0.7;
+    shape-rendering: crispEdges;
+    stroke-dasharray: 3, 3;
 }
 
 .grid path {
-stroke-width: 0;
+    stroke-width: 0;
 }
