@@ -12,7 +12,8 @@ let dataObject = [],
 ///// Google Maps
 
 let rowNum = 5,
-    rowLoadCount, rectangle, map, elevator;
+    sampleSize = 30,
+    rowLoadCount, rectangle, map, elevator, currentDistance;
 
 
 ///// D3
@@ -28,13 +29,13 @@ let y = d3.scaleLinear().range([height, 0]);
 
 // Define the fill area
 var area = d3.area()
-    .x(function(d, i) { return x(i); })
+    .x(function(d, i) { return x(i * (currentDistance / sampleSize)); })
     .y0(height)
     .y1(function(d) { return y(d.elevation); });
 
 // Define the line
 let valueline = d3.line()
-    .x(function(d, i) { return x(i); })
+    .x(function(d, i) { return x(i * (currentDistance / sampleSize)); })
     .y(function(d) { return y(d.elevation); });
 
 // Adds the svg canvas
@@ -48,6 +49,20 @@ let svg = d3.select("#graph-container")
 
 
 ////// GOOGLE MAPS FUNCTIONS
+
+function distance(lat1, lon1, lat2, lon2, unit = "K") {
+    let radlat1 = Math.PI * lat1 / 180
+    let radlat2 = Math.PI * lat2 / 180
+    let theta = lon1 - lon2
+    let radtheta = Math.PI * theta / 180
+    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    dist = Math.acos(dist)
+    dist = dist * 180 / Math.PI
+    dist = dist * 60 * 1.1515
+    if (unit == "K") { dist = dist * 1.609344 }
+    if (unit == "N") { dist = dist * 0.8684 }
+    return dist
+}
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -121,14 +136,17 @@ function updateElevation(bounds) {
 
         elevator.getElevationAlongPath({
             'path': path,
-            'samples': 30
+            'samples': sampleSize
         }, function(data, status) {
             dataObject[i] = data;
 
             rowLoadCount++;
 
             // make sure to only call the graph function when the data update is complete
-            if(rowLoadCount === rowNum)  {
+            if (rowLoadCount === rowNum) {
+
+                currentDistance = distance(path[0].lat, path[0].lng, path[1].lat, path[1].lng);
+
                 !isInitialized ? initGraph(dataObject) : updateGraph(dataObject);
             }
         });
@@ -143,7 +161,7 @@ function initGraph(data) {
 
     let flatData = [].concat.apply([], data);
     // Scale the range of the data
-    x.domain(d3.extent(data[0], function(d, i) { return i; }));
+    x.domain([0, currentDistance]);
     y.domain([
         d3.min(flatData, function(d) { return d.elevation; }),
         d3.max(flatData, function(d) { return d.elevation; })
@@ -184,7 +202,7 @@ function updateGraph(data) {
 
     let flatData = [].concat.apply([], data);
     // Scale the range of the data
-    x.domain(d3.extent(data[0], function(d, i) { return i; }));
+    x.domain([0, currentDistance]);
     y.domain([
         d3.min(flatData, function(d) { return d.elevation; }),
         d3.max(flatData, function(d) { return d.elevation; })
