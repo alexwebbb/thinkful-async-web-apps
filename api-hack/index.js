@@ -19,7 +19,7 @@ let rowNum = 5,
 ///// D3
 
 // Set the dimensions of the canvas / graph
-let margin = { top: 30, right: 20, bottom: 30, left: 50 },
+let margin = { top: 30, right: 20, bottom: 50, left: 70 },
     width = 600 - margin.left - margin.right,
     height = 270 - margin.top - margin.bottom;
 
@@ -192,10 +192,27 @@ function initGraph(data) {
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
 
+
+    // text label for the x axis
+    svg.append("text")
+        .attr("x", width / 2)
+        .attr("y", height + margin.top)
+        .style("text-anchor", "middle")
+        .text("Distance (meters)");
+
     // Add the Y Axis
     svg.append("g")
         .attr("class", "y axis")
         .call(d3.axisLeft(y));
+
+    // text label for the y axis
+    svg.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 0 - margin.left + 10)
+        .attr("x", 0 - (height / 2))
+        .attr("dy", "1em")
+        .style("text-anchor", "middle")
+        .text("Elevation (meters)");
 
     // add the Y gridlines
     svg.append("g")
