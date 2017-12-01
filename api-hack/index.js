@@ -11,7 +11,8 @@ let dataObject = [],
 
 ///// Google Maps
 
-let rectangle, map, elevator, infoWindow;
+let rowNum = 5,
+    rowLoadCount, rectangle, map, elevator;
 
 
 ///// D3
@@ -102,7 +103,6 @@ function updateElevation(bounds) {
 
 
     let b = bounds;
-    let rowNum = 5;
 
     let interval = (b.south - b.north) / (rowNum - 1);
 
@@ -117,29 +117,28 @@ function updateElevation(bounds) {
             lng: b.east
         }];
 
+        rowLoadCount = 0;
+
         elevator.getElevationAlongPath({
             'path': path,
             'samples': 30
         }, function(data, status) {
             dataObject[i] = data;
 
-            console.log(status);
+            rowLoadCount++;
 
             // make sure to only call the graph function when the data update is complete
-            if (i === (rowNum - 1)) {
+            if(rowLoadCount === rowNum)  {
                 !isInitialized ? initGraph(dataObject) : updateGraph(dataObject);
             }
         });
     }
-
-
 }
 
 
 function initGraph(data) {
 
     isInitialized = true;
-
     colorScale = d3.interpolateRgb("blue", "red");
 
     let flatData = [].concat.apply([], data);
@@ -150,7 +149,7 @@ function initGraph(data) {
         d3.max(flatData, function(d) { return d.elevation; })
     ]);
 
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
 
         // add the area
         svg.append("path")
