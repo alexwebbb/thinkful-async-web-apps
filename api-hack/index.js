@@ -13,7 +13,7 @@ let dataObject = [],
 
 let rowNum = 5,
     sampleSize = 30,
-    rowLoadCount, rectangle, map, elevator, currentDistance;
+    rowLoadCount, rectangle, map, elevator, currentDistance, boxImage, boxMarker;
 
 
 ///// D3
@@ -53,11 +53,11 @@ let svg = d3.select("#graph-container")
 // generic spherical distance function
 // from http://www.geodatasource.com/developers/javascript
 function distance(lat1, lon1, lat2, lon2, unit = "K") {
-    let radlat1 = Math.PI * lat1 / 180
-    let radlat2 = Math.PI * lat2 / 180
-    let theta = lon1 - lon2
-    let radtheta = Math.PI * theta / 180
-    let dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    let radlat1 = Math.PI * lat1 / 180,
+        radlat2 = Math.PI * lat2 / 180,
+        theta = lon1 - lon2,
+        radtheta = Math.PI * theta / 180,
+        dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
     dist = Math.acos(dist)
     dist = dist * 180 / Math.PI
     dist = dist * 60 * 1.1515
@@ -74,7 +74,7 @@ function initMap() {
     elevator = new google.maps.ElevationService;
 
 
-    let bounds = {
+    let b = {
         north: 44.599,
         south: 44.490,
         east: -78.443,
@@ -83,45 +83,64 @@ function initMap() {
 
     // Define the rectangle and set its editable property to true.
     rectangle = new google.maps.Rectangle({
-        bounds: bounds,
+        bounds: b,
         editable: true,
         draggable: true
     });
 
     rectangle.setMap(map);
 
+    boxImage = {
+        url: 'box.png',
+        scaledSize: new google.maps.Size(30, 30),
+        anchor: new google.maps.Point(15, 15)
+    }
+
+    boxMarker = new google.maps.Marker({
+        position: {
+            lat: b.north - ((b.north - b.south) / 2),
+            lng: b.east - ((b.east - b.west) / 2)
+        },
+        map: map,
+        icon: boxImage
+    });
+
+
     // Add an event listener on the rectangle.
-    rectangle.addListener('dragend', showNewRect);
+    rectangle.addListener('dragend', updateElevation);
 
-    // Define an info window on the map.
-    // infoWindow = new google.maps.InfoWindow();
+    // Add an event listener on the rectangle for the icon.
+    rectangle.addListener('bounds_changed', setIconPosition);
+
 }
-// Show the new coordinates for the rectangle in an info window.
 
-/** @this {google.maps.Rectangle} */
-function showNewRect(event) {
-    let ne = rectangle.getBounds().getNorthEast();
-    let sw = rectangle.getBounds().getSouthWest();
 
+function setIconPosition(event) {
 
     // construct path request
-    let bounds = {
-        north: ne.lat(),
-        west: sw.lng(),
-        south: sw.lat(),
-        east: ne.lng()
-    };
+    let north = rectangle.getBounds().getNorthEast().lat(),
+        west = rectangle.getBounds().getSouthWest().lng(),
+        south = rectangle.getBounds().getSouthWest().lat(),
+        east = rectangle.getBounds().getNorthEast().lng();
 
-    updateElevation(bounds);
+
+    let center = {
+        lat: north - ((north - south) / 2),
+        lng: east - ((east - west) / 2)
+    }
+
+    boxMarker.setPosition(new google.maps.LatLng(center.lat, center.lng));
 }
 
+function updateElevation(event) {
 
-function updateElevation(bounds) {
-
-
-    let b = bounds;
-
-    let interval = (b.south - b.north) / (rowNum - 1);
+    let b = {
+            north: rectangle.getBounds().getNorthEast().lat(),
+            west: rectangle.getBounds().getSouthWest().lng(),
+            south: rectangle.getBounds().getSouthWest().lat(),
+            east: rectangle.getBounds().getNorthEast().lng()
+        },
+        interval = (b.south - b.north) / (rowNum - 1);
 
     for (let i = 0; i < rowNum; i++) {
 
