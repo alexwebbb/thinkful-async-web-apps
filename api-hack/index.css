@@ -28,3 +28,14 @@ body {
 .area {
     fill-opacity: 0.7;
 }
+
+.grid line {
+stroke: darkgrey;
+stroke-opacity: 0.7;
+shape-rendering: crispEdges;
+stroke-dasharray: 3, 3;
+}
+
+.grid path {
+stroke-width: 0;
+}

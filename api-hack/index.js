@@ -50,6 +50,8 @@ let svg = d3.select("#graph-container")
 
 ////// GOOGLE MAPS FUNCTIONS
 
+// generic spherical distance function
+// from http://www.geodatasource.com/developers/javascript
 function distance(lat1, lon1, lat2, lon2, unit = "K") {
     let radlat1 = Math.PI * lat1 / 180
     let radlat2 = Math.PI * lat2 / 180
@@ -194,6 +196,14 @@ function initGraph(data) {
     svg.append("g")
         .attr("class", "y axis")
         .call(d3.axisLeft(y));
+
+    // add the Y gridlines
+    svg.append("g")
+        .attr("class", "grid")
+        .call(d3.axisLeft(y)
+            .tickSize(-width)
+            .tickFormat("")
+        )
 }
 
 
@@ -233,4 +243,10 @@ function updateGraph(data) {
     svg.select(".y.axis")
         .duration(750)
         .call(d3.axisLeft(y));
+
+    svg.select(".grid")
+        .duration(750)
+        .call(d3.axisLeft(y)
+            .tickSize(-width)
+            .tickFormat(""));
 }
