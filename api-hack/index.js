@@ -1,47 +1,46 @@
-// This example adds a user-editable rectangle to the map.
-// When the user changes the bounds of the rectangle,
-// an info window pops up displaying the new bounds.
+'use strict';
 
-
-///// Data Object
-
-let dataObject = [],
-    isInitialized = false,
+///// DATA STATE VARIABLE SECTION
+// variables used specifically 
+// for storing the state of the graph
+const dataObject = [];
+let isInitialized = false,
     colorScale;
 
-///// Google Maps
+///// GOOGLE MAPS VARIABLE SECTION
+// variables used to store the map and the state
+// of ajax requests from the google API, aside
+// from the elevation data result itself
+const rowNum = 5,
+    sampleSize = 30;
+let rowLoadCount, rectangle, map, elevator,
+    currentDistance, boxImage, boxMarker;
 
-let rowNum = 5,
-    sampleSize = 30,
-    rowLoadCount, rectangle, map, elevator, currentDistance, boxImage, boxMarker;
-
-
-
-// test
-///// D3
-
+///// D3 VARIABLE SECTION
 // Set the dimensions of the canvas / graph
-let margin = { top: 30, right: 20, bottom: 50, left: 70 },
+const margin = { top: 30, right: 20, bottom: 50, left: 70 },
     width = 600 - margin.left - margin.right,
     height = 270 - margin.top - margin.bottom;
 
-// Set the ranges
-let x = d3.scaleLinear().range([0, width]);
-let y = d3.scaleLinear().range([height, 0]);
+// Set the ranges of the graph based on the size of the
+// space we will be displaying in.
+const x = d3.scaleLinear().range([0, width]),
+    y = d3.scaleLinear().range([height, 0]);
 
-// Define the fill area
-var area = d3.area()
+// Define the fill area function, which computes the space under a curve
+// by drawing from the x axis to the curve
+const area = d3.area()
     .x(function(d, i) { return x(i * (currentDistance / sampleSize)); })
     .y0(height)
     .y1(function(d) { return y(d.elevation); });
 
-// Define the line
-let valueline = d3.line()
+// Define the line function which generates our aforementioned curve 
+const valueline = d3.line()
     .x(function(d, i) { return x(i * (currentDistance / sampleSize)); })
     .y(function(d) { return y(d.elevation); });
 
-// Adds the svg canvas
-let svg = d3.select("#graph-container")
+// Adds the svg canvas on which we will be drawing the graph
+const svg = d3.select("#graph-container")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -55,11 +54,12 @@ let svg = d3.select("#graph-container")
 // generic spherical distance function
 // from http://www.geodatasource.com/developers/javascript
 function distance(lat1, lon1, lat2, lon2, unit = "K") {
-    let radlat1 = Math.PI * lat1 / 180,
+    const radlat1 = Math.PI * lat1 / 180,
         radlat2 = Math.PI * lat2 / 180,
         theta = lon1 - lon2,
-        radtheta = Math.PI * theta / 180,
-        dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        radtheta = Math.PI * theta / 180;
+    let dist = Math.sin(radlat1) * Math.sin(radlat2) +
+        Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
     dist = Math.acos(dist)
     dist = dist * 180 / Math.PI
     dist = dist * 60 * 1.1515
@@ -68,6 +68,8 @@ function distance(lat1, lon1, lat2, lon2, unit = "K") {
     return dist
 }
 
+// shorthand function which returns the 
+// current bounds of the google maps rect
 function getRectBounds() {
     return {
         north: rectangle.getBounds().getNorthEast().lat(),
@@ -77,6 +79,8 @@ function getRectBounds() {
     };
 }
 
+// get the center of an arbitrary rect, 
+// using the format from above
 function getCenter(bounds) {
     return {
         lat: bounds.north - ((bounds.north - bounds.south) / 2),
@@ -84,21 +88,30 @@ function getCenter(bounds) {
     };
 }
 
+// this is our entry function, this is actually called
+// externally in the script tag via callback once the google
+// maps API is loaded
 function initMap() {
+
+    // create our map instance
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 44.5452, lng: -78.5389 },
         zoom: 9
     });
+
+    // create an instance of the google elevation API which
+    // will handle our AJAX requests for elevation data
     elevator = new google.maps.ElevationService;
 
-    let b = {
+    // our initial bounds on page load
+    const b = {
         north: 44.599,
         south: 44.490,
         east: -78.443,
         west: -78.649
     };
 
-    // Define the rectangle and set its editable property to true.
+    // Create an instance of the draggable rectangle
     rectangle = new google.maps.Rectangle({
         bounds: b,
         editable: true,
@@ -107,14 +120,19 @@ function initMap() {
         fillColor: 'SpringGreen'
     });
 
+    // place our rectangle on the map we already created
     rectangle.setMap(map);
 
+    // create an object which holds the characteristics
+    // of our marker icon
     boxImage = {
         url: 'box.png',
         scaledSize: new google.maps.Size(30, 30),
         anchor: new google.maps.Point(15, 15)
     }
 
+    // create an instance of our marker icon and place 
+    // it in the center of our initial bounding box
     boxMarker = new google.maps.Marker({
         position: getCenter(b),
         map: map,
@@ -122,8 +140,9 @@ function initMap() {
     });
 
 
-    // Add an event listener on the drag end event.
+    // Add an event listener for the drag end event.
     // for performance reasons, cant use 'bounds changed'
+    // which runs every frame.
     rectangle.addListener('dragend', updateElevation);
 
     // Add an event listener on the rectangle for the icon.
@@ -131,24 +150,29 @@ function initMap() {
 
 }
 
-
+// this function sets the position of the icon each 
+// frame that the position or bounds of the rect change
 function setIconPosition(event) {
 
-    let b = getRectBounds(),
+    const b = getRectBounds(),
         center = getCenter(b);
 
     boxMarker.setPosition(center);
 }
 
+// here is where the ajax request for 
+// our elevation data is performed
 function updateElevation(event) {
 
-    let b = getRectBounds(),
+    const b = getRectBounds(),
         interval = (b.south - b.north) / (rowNum - 1);
 
+    // construct a path request for each row we want,
+    // based on the row num we have selected
     for (let i = 0; i < rowNum; i++) {
 
-        // construct path
-        let path = [{
+        // construct path using the interval value
+        const path = [{
             lat: b.north + (interval * i),
             lng: b.west
         }, {
@@ -156,28 +180,37 @@ function updateElevation(event) {
             lng: b.east
         }];
 
+        // set our row state variable to zero
+        // this basically restarts the ajax cycle
+        // whenever this function is called
         rowLoadCount = 0;
 
+        // the actual ajax request
         elevator.getElevationAlongPath({
             'path': path,
             'samples': sampleSize
         }, function(data, status) {
+
+            // assign our returned data to the appropriate row
             dataObject[i] = data;
 
+            // increment our counter. the data set is only valid once we have all the rows
             rowLoadCount++;
 
             // make sure to only call the graph function when the data update is complete
             if (rowLoadCount === rowNum) {
 
+                // calaculate the distance our graph covers
                 currentDistance = distance(path[0].lat, path[0].lng, path[1].lat, path[1].lng);
 
+                // call either the update or our graph init
                 !isInitialized ? initGraph(dataObject) : updateGraph(dataObject);
             }
         });
     }
 }
 
-
+// creates our graph
 function initGraph(data) {
 
     isInitialized = true;
@@ -247,7 +280,7 @@ function initGraph(data) {
         )
 }
 
-
+// updates the state of the graph
 function updateGraph(data) {
 
 
