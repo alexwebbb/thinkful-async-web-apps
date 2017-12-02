@@ -333,7 +333,7 @@ function updateGraph(data) {
         .duration(750)
         .call(d3.axisLeft(y));
 
-        // update our long ticks
+    // update our grid lines
     svg.select(".grid")
         .duration(750)
         .call(d3.axisLeft(y)
