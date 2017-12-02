@@ -214,26 +214,37 @@ function updateElevation(event) {
 function initGraph(data) {
 
     isInitialized = true;
+
+    // this creates an enumerated scale of colors 
+    // the interpolates between the two specified
     colorScale = d3.interpolateRgb("blue", "red");
 
+    // flattens our 3d array into a 2d array 
+    // so that our domain function can consider it
     let flatData = [].concat.apply([], data);
-    // Scale the range of the data
+
+    // domain function maps the calculated scale of 
+    // our graph to match, you guessed it, the domain 
+    // of the data. this is utilized to map the values 
+    // of our data set to positional values whenever 
+    // the x and y functions are called
     x.domain([0, currentDistance]);
     y.domain([
         d3.min(flatData, function(d) { return d.elevation; }),
         d3.max(flatData, function(d) { return d.elevation; })
     ]);
 
+    // create a line and area under line for each row of the data set
     for (let i = 0; i < data.length; i++) {
 
-        // add the area
+        // add the area. d3 always draws on top, so draw order matters
         svg.append("path")
             .data([data[i]])
             .attr("class", `area area${i + 1}`)
             .style("fill", `${colorScale((i + 1) / data.length)}`)
             .attr("d", area(data[i]));
 
-        // add the line
+        // now we can add the line, which sits on top of the filled area
         svg.append("path")
             .data([data[i]])
             .attr("class", `line line${i + 1}`)
@@ -283,26 +294,30 @@ function initGraph(data) {
 // updates the state of the graph
 function updateGraph(data) {
 
-
+    // remember this from the init function?
     let flatData = [].concat.apply([], data);
-    // Scale the range of the data
+
+    // Scale the domain of the data. x and y map to 
+    // positional values. see initGraph explanation
     x.domain([0, currentDistance]);
     y.domain([
         d3.min(flatData, function(d) { return d.elevation; }),
         d3.max(flatData, function(d) { return d.elevation; })
     ]);
 
-
+    // grab our prexisiting graph
     let svg = d3.select("#graph-container").transition();
-    // Add the valueline path.
 
+    // loop through our existing elements and 
+    // update them based on the current data state
     for (var i = 0; i < data.length; i++) {
 
-        // add the area
+        // update fill area
         svg.select(`.area${i + 1}`)
             .duration(750)
             .attr("d", area(data[i]));
 
+        // update our line
         svg.select(`.line${i + 1}`)
             .duration(750)
             .attr("d", valueline(data[i]));
@@ -318,6 +333,7 @@ function updateGraph(data) {
         .duration(750)
         .call(d3.axisLeft(y));
 
+        // update our long ticks
     svg.select(".grid")
         .duration(750)
         .call(d3.axisLeft(y)
