@@ -88,10 +88,10 @@ const App = (() => {
             case 90:
                 path = [{
                     lat: b.north,
-                    lng: b.west + nDistance
+                    lng: b.east + nDistance
                 }, {
                     lat: b.south,
-                    lng: b.west + nDistance
+                    lng: b.east + nDistance
                 }];
                 break;
             case 2:
@@ -103,20 +103,57 @@ const App = (() => {
                     lat: b.south - nDistance,
                     lng: b.west
                 }];
+                break;
             case 3:
             case 270:
                 path = [{
                     lat: b.south,
-                    lng: b.east - nDistance
+                    lng: b.west - nDistance
                 }, {
                     lat: b.north,
-                    lng: b.east - nDistance
+                    lng: b.west - nDistance
                 }];
                 break;
         }
 
         return path;
     }
+
+
+    const CenterControl = function(controlDiv, map) {
+
+        // Set CSS for the control border.
+        let controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Click to recenter the map';
+        controlDiv.appendChild(controlUI);
+
+        // Set CSS for the control interior.
+        let controlText = document.createElement('div');
+        controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+        controlText.style.fontSize = '16px';
+        controlText.style.lineHeight = '38px';
+        controlText.style.paddingLeft = '5px';
+        controlText.style.paddingRight = '5px';
+        controlText.innerHTML = 'Rotate View';
+        controlUI.appendChild(controlText);
+
+        // Setup the click event listeners: simply set the map to Chicago.
+        controlUI.addEventListener('click', function() {
+            currentRotation = (currentRotation + 1) % 4;
+            console.log(currentRotation);
+            updateElevation();
+        });
+
+    }
+
 
 
     ///// D3 VARIABLE SECTION
@@ -221,6 +258,15 @@ const App = (() => {
         // Add an event listener on the rectangle for the icon.
         rectangle.addListener('bounds_changed', setIconPosition);
 
+        // Create the DIV to hold the control and call the CenterControl()
+        // constructor passing in this DIV.
+        let centerControlDiv = document.createElement('div'),
+            centerControl = new CenterControl(centerControlDiv, map);
+
+        centerControlDiv.index = 1;
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+
     }
 
     // this function sets the position of the icon each 
@@ -290,7 +336,7 @@ const App = (() => {
 
         // flattens our 3d array into a 2d array 
         // so that our domain function can consider it
-        let flatData = [].concat.apply([], data);
+        const flatData = [].concat.apply([], data);
 
         // domain function maps the calculated scale of 
         // our graph to match, you guessed it, the domain 
@@ -364,7 +410,7 @@ const App = (() => {
     const updateGraph = (data) => {
 
         // remember this from the init function?
-        let flatData = [].concat.apply([], data);
+        const flatData = [].concat.apply([], data);
 
         // Scale the domain of the data. x and y map to 
         // positional values. see initGraph explanation
@@ -379,7 +425,7 @@ const App = (() => {
 
         // loop through our existing elements and 
         // update them based on the current data state
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
 
             // update fill area
             svg.select(`.area${i + 1}`)
