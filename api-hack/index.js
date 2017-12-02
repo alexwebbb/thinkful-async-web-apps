@@ -16,6 +16,8 @@ let rowNum = 5,
     rowLoadCount, rectangle, map, elevator, currentDistance, boxImage, boxMarker;
 
 
+
+// test
 ///// D3
 
 // Set the dimensions of the canvas / graph
