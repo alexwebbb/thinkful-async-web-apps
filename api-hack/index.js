@@ -1,6 +1,6 @@
 'use strict';
 
-const App = (function() {
+const App = (() => {
 
 
     ///// DATA STATE VARIABLE SECTION
@@ -29,7 +29,7 @@ const App = (function() {
 
     // generic spherical distance function
     // from http://www.geodatasource.com/developers/javascript
-    const distance = function(lat1, lon1, lat2, lon2, unit = "K") {
+    const distance = (lat1, lon1, lat2, lon2, unit = "K") => {
         const radlat1 = Math.PI * lat1 / 180,
             radlat2 = Math.PI * lat2 / 180,
             theta = lon1 - lon2,
@@ -46,7 +46,7 @@ const App = (function() {
 
     // shorthand function which returns the 
     // current bounds of the google maps rect
-    const getRectBounds = function() {
+    const getRectBounds = () => {
         return {
             north: rectangle.getBounds().getNorthEast().lat(),
             west: rectangle.getBounds().getSouthWest().lng(),
@@ -57,7 +57,7 @@ const App = (function() {
 
     // get the center of an arbitrary rect, 
     // using the format from above
-    const getCenter = function(bounds) {
+    const getCenter = (bounds) => {
         return {
             lat: bounds.north - ((bounds.north - bounds.south) / 2),
             lng: bounds.east - ((bounds.east - bounds.west) / 2)
@@ -139,14 +139,14 @@ const App = (function() {
     // Define the fill area function, which computes the space under a curve
     // by drawing from the x axis to the curve
     const area = d3.area()
-        .x(function(d, i) { return x(i * (currentDistance / sampleSize)); })
+        .x((d, i) => { return x(i * (currentDistance / sampleSize)); })
         .y0(height)
-        .y1(function(d) { return y(d.elevation); });
+        .y1((d) => { return y(d.elevation); });
 
     // Define the line function which generates our aforementioned curve 
     const valueline = d3.line()
-        .x(function(d, i) { return x(i * (currentDistance / sampleSize)); })
-        .y(function(d) { return y(d.elevation); });
+        .x((d, i) => { return x(i * (currentDistance / sampleSize)); })
+        .y((d) => { return y(d.elevation); });
 
     // Adds the svg canvas on which we will be drawing the graph
     const svg = d3.select("#graph-container")
@@ -163,8 +163,8 @@ const App = (function() {
 
     // this is our entry function, this is actually called
     // externally in the script tag via callback once the google
-    // maps API is loaded
-    const initMap = function() {
+    // maps API is loaded. It is the only public function
+    const initMap = () => {
 
         // create our map instance
         map = new google.maps.Map(document.getElementById('map'), {
@@ -225,7 +225,7 @@ const App = (function() {
 
     // this function sets the position of the icon each 
     // frame that the position or bounds of the rect change
-    const setIconPosition = function(event) {
+    const setIconPosition = (event) => {
 
         const b = getRectBounds(),
             center = getCenter(b);
@@ -235,7 +235,7 @@ const App = (function() {
 
     // here is where the ajax request for 
     // our elevation data is performed
-    const updateElevation = function(event) {
+    const updateElevation = (event) => {
 
         const b = getRectBounds(),
             // our interval is the discrete distance 
@@ -280,12 +280,12 @@ const App = (function() {
     }
 
     // creates our graph
-    const initGraph = function(data) {
+    const initGraph = (data) => {
 
         isInitialized = true;
 
         // this creates an enumerated scale of colors 
-        // the interpolates between the two specified
+        // that interpolates between the two specified
         colorScale = d3.interpolateRgb("blue", "red");
 
         // flattens our 3d array into a 2d array 
@@ -299,8 +299,8 @@ const App = (function() {
         // the x and y functions are called
         x.domain([0, currentDistance]);
         y.domain([
-            d3.min(flatData, function(d) { return d.elevation; }),
-            d3.max(flatData, function(d) { return d.elevation; })
+            d3.min(flatData, (d) => { return d.elevation; }),
+            d3.max(flatData, (d) => { return d.elevation; })
         ]);
 
         // create a line and area under line for each row of the data set
@@ -361,7 +361,7 @@ const App = (function() {
     }
 
     // updates the state of the graph
-    const updateGraph = function(data) {
+    const updateGraph = (data) => {
 
         // remember this from the init function?
         let flatData = [].concat.apply([], data);
@@ -370,8 +370,8 @@ const App = (function() {
         // positional values. see initGraph explanation
         x.domain([0, currentDistance]);
         y.domain([
-            d3.min(flatData, function(d) { return d.elevation; }),
-            d3.max(flatData, function(d) { return d.elevation; })
+            d3.min(flatData, (d) => { return d.elevation; }),
+            d3.max(flatData, (d) => { return d.elevation; })
         ]);
 
         // grab our prexisiting graph
