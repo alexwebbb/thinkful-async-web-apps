@@ -1,41 +1,46 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Earthworm</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-        <link rel="stylesheet" href="index.css">
-    </head>
-    <body>
-        <!-- Image and text -->
-        <div class="mw-100 container">
-            <nav class="navbar navbar-light bg-faded">
-                <a class="navbar-brand" href="#">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Earthworm</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <!-- Image and text -->
+    <div class="mw-100 container">
+        <nav class="navbar navbar-light bg-faded">
+            <a class="navbar-brand" href="#">
                     <img src="logo.svg" width="100" height="100%" class="d-inline-block align-middle" alt="Earthworm Logo">
                     Earthworm
                 </a>
-            </nav>
-            <div class="row no-gutters">
-                <div class="col-md-12 ">
-                    <section id="map-container">
-                        <div id="map"></div>
-                    </section>                     
-                </div>
-                <div class="col-md-4">
-                    <h3>Column title</h3> 
-                    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p> 
-                </div>
-                <div class="col-md-8">
-                    <section id="graph-container">
-</section>                     
-                </div>
+        </nav>
+        <div class="row no-gutters">
+            <div class="col-md-12 ">
+                <section id="map-container">
+                    <div id="map"></div>
+                </section>
+            </div>
+            <div class="col-md-4">
+                <h3>Column title</h3>
+                <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+            </div>
+            <div class="col-md-8">
+                <section id="graph-container">
+                </section>
             </div>
         </div>
-        <script src="../lib/jq/jquery-3.2.1.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-        <script src="../lib/d3/d3.v4.min.js"></script>
-        <script src="index.js"></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBzNhfut8u9Ok-mhwOtVvKFYVHgCxyEzE&callback=init"></script>
-    </body>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="../lib/d3/d3.v4.min.js"></script>
+    <script src="index.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBzNhfut8u9Ok-mhwOtVvKFYVHgCxyEzE&callback=init"></script>
+</body>
+
 </html>
