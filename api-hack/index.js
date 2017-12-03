@@ -211,10 +211,10 @@ const App = (() => {
     // -> pure functions using native D3 classes
 
 
-// (re)Sets our initial variables, including 
-// checking the size of the window.
-// In addition, it updates the position of 
-// the axes labels when the window is resized
+    // (re)Sets our initial variables, including 
+    // checking the size of the window.
+    // In addition, it updates the position of 
+    // the axes labels when the window is resized
     const resetD3 = function(data) {
 
         margin = { top: 30, right: 20, bottom: 50, left: 70 };
@@ -354,13 +354,13 @@ const App = (() => {
             centerControlRightDiv = document.createElement('div'),
             centerControlRight = new CenterControlRight(centerControlRightDiv, map);
 
-// ehh should take a look at this later
+        // ehh should take a look at this later
         centerControlLeftDiv.index = 1;
         centerControlRightDiv.index = 1;
 
 
-// responsive placement of the buttons... 
-// middle buttons look cool in big view
+        // responsive placement of the buttons... 
+        // middle buttons look cool in big view
         if ($(window).width() > 1024) {
 
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlLeftDiv);
@@ -371,7 +371,7 @@ const App = (() => {
             map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centerControlRightDiv);
         }
 
-// go ahead get data
+        // go ahead get data
         updateElevation();
     }
 
@@ -439,7 +439,7 @@ const App = (() => {
         // automagically initializes variables
         resetD3(data);
 
-// we only want to call the listener once
+        // we only want to call the listener once
         if (!isInitialized) {
             $(window).resize(resetD3);
             isInitialized = true;
