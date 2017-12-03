@@ -1,4 +1,5 @@
 /* inherit box sizing */
+
 html {
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
@@ -10,13 +11,15 @@ html {
     box-sizing: inherit;
 }
 
-h1,
-#graph-title {
+h1 {
     font-family: 'Raleway', sans-serif;
 }
 
+
+
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
+
 #map-container {
     height: 270px;
 }
@@ -72,6 +75,4 @@ h1,
     stroke-width: 0;
 }
 
-.description-title {
-    font-size: 32px;
-}
+#graph-container {}

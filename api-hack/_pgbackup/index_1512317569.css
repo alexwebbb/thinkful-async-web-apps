@@ -72,6 +72,8 @@ h1,
     stroke-width: 0;
 }
 
+#graph-container {
+}
+
 .description-title {
-    font-size: 32px;
 }
