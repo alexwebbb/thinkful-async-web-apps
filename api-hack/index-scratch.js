@@ -195,20 +195,36 @@ const App = (() => {
     ///// D3 VARIABLE SECTION
 
     // Set the dimensions of the canvas / graph
-    const margin = { top: 30, right: 20, bottom: 50, left: 70 },
-        wMax = Math.min($('#graph-container').parent().width(), 800),
-        width = wMax - margin.left - margin.right,
-        height = 270 - margin.top - margin.bottom,
-        // Set the ranges of the graph based on the size of the
-        // space we will be displaying in.
-        x = d3.scaleLinear().range([0, width]),
-        y = d3.scaleLinear().range([height, 0]);
-
-    let colorScale;
+    let margin, wMax, width, height, x, y, colorScale, svg;
 
 
     ///// D3 FUNCTION AREA 
     // -> pure functions using native D3 classes
+
+
+    const resetD3 = function() {
+        d3.select("svg").remove();
+
+
+        margin = { top: 30, right: 20, bottom: 50, left: 70 };
+        wMax = Math.min($('#graph-container').parent().width(), 800);
+        width = wMax - margin.left - margin.right;
+        height = 270 - margin.top - margin.bottom;
+        // Set the ranges of the graph based on the size of the
+        // space we will be displaying in.
+        x = d3.scaleLinear().range([0, width]);
+        y = d3.scaleLinear().range([height, 0]);
+
+
+        // Adds the svg canvas on which we will be drawing the graph
+        svg = d3.select("#graph-container")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+    }
 
     // Define the fill area function, which computes the space under a curve
     // by drawing from the x axis to the curve
@@ -222,14 +238,6 @@ const App = (() => {
         .x((d, i) => { return x(i * (currentDistance / sampleSize)); })
         .y((d) => { return y(d.elevation); });
 
-    // Adds the svg canvas on which we will be drawing the graph
-    const svg = d3.select("#graph-container")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
 
 
     ///// RUNTIME FUNCTIONS
@@ -384,7 +392,13 @@ const App = (() => {
     // creates our graph
     const initGraph = (data) => {
 
-        isInitialized = true;
+        resetD3();
+
+        if (!isInitialized) {
+            $(window).resize(initGraph);
+            isInitialized = true;
+        }
+
 
         // this creates an enumerated scale of colors 
         // that interpolates between the two specified
