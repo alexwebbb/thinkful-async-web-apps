@@ -121,6 +121,9 @@ const App = (() => {
         return path;
     }
 
+
+    // helper function that sets the 
+    // css for the google map buttons
     const setCenterControlCss = (controlUI, controlText) => {
 
         controlUI.style.backgroundColor = '#fff';
@@ -142,6 +145,9 @@ const App = (() => {
 
     }
 
+    // These are constructors that 
+    // are called during the map init
+    // left rotation button. 
     const CenterControlLeft = function(controlDiv, map) {
 
         let controlUI = document.createElement('div');
@@ -166,6 +172,7 @@ const App = (() => {
 
     }
 
+    // right rotation button
     const CenterControlRight = function(controlDiv, map) {
 
         let controlUI = document.createElement('div');
@@ -204,6 +211,10 @@ const App = (() => {
     // -> pure functions using native D3 classes
 
 
+// (re)Sets our initial variables, including 
+// checking the size of the window.
+// In addition, it updates the position of 
+// the axes labels when the window is resized
     const resetD3 = function(data) {
 
         margin = { top: 30, right: 20, bottom: 50, left: 70 };
@@ -272,7 +283,7 @@ const App = (() => {
 
 
     ///// RUNTIME FUNCTIONS
-    // -> functions that utilize state
+    // -> ie. functions that utilize state
 
     // this is our entry function, this is actually called
     // externally in the script tag via callback once the google
@@ -337,17 +348,19 @@ const App = (() => {
         // Add an event listener on the rectangle for the icon.
         rectangle.addListener('bounds_changed', setIconPosition);
 
-        // Create the DIV to hold the control and call the CenterControl()
-        // constructor passing in this DIV.
+        // create the div and then the button itself
         const centerControlLeftDiv = document.createElement('div'),
             centerControlLeft = new CenterControlLeft(centerControlLeftDiv, map),
             centerControlRightDiv = document.createElement('div'),
             centerControlRight = new CenterControlRight(centerControlRightDiv, map);
 
+// ehh should take a look at this later
         centerControlLeftDiv.index = 1;
         centerControlRightDiv.index = 1;
 
 
+// responsive placement of the buttons... 
+// middle buttons look cool in big view
         if ($(window).width() > 1024) {
 
             map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlLeftDiv);
@@ -358,7 +371,7 @@ const App = (() => {
             map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centerControlRightDiv);
         }
 
-
+// go ahead get data
         updateElevation();
     }
 
@@ -423,8 +436,10 @@ const App = (() => {
     // creates our graph
     const initGraph = (data) => {
 
+        // automagically initializes variables
         resetD3(data);
 
+// we only want to call the listener once
         if (!isInitialized) {
             $(window).resize(resetD3);
             isInitialized = true;
