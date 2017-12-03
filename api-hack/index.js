@@ -195,41 +195,73 @@ const App = (() => {
     ///// D3 VARIABLE SECTION
 
     // Set the dimensions of the canvas / graph
-    const margin = { top: 30, right: 20, bottom: 50, left: 70 },
-        wMax = Math.min($('#graph-container').parent().width(), 800),
-        width = wMax - margin.left - margin.right,
-        height = 270 - margin.top - margin.bottom,
-        // Set the ranges of the graph based on the size of the
-        // space we will be displaying in.
-        x = d3.scaleLinear().range([0, width]),
-        y = d3.scaleLinear().range([height, 0]);
-
-    let colorScale;
+    let margin, wMax, width, height, x, y, colorScale, area, valueline, svg;
 
 
     ///// D3 FUNCTION AREA 
     // -> pure functions using native D3 classes
 
-    // Define the fill area function, which computes the space under a curve
-    // by drawing from the x axis to the curve
-    const area = d3.area()
-        .x((d, i) => { return x(i * (currentDistance / sampleSize)); })
-        .y0(height)
-        .y1((d) => { return y(d.elevation); });
 
-    // Define the line function which generates our aforementioned curve 
-    const valueline = d3.line()
-        .x((d, i) => { return x(i * (currentDistance / sampleSize)); })
-        .y((d) => { return y(d.elevation); });
+    const resetD3 = function(data) {
 
-    // Adds the svg canvas on which we will be drawing the graph
-    const svg = d3.select("#graph-container")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+        margin = { top: 30, right: 20, bottom: 50, left: 70 };
+        wMax = Math.min($('#graph-container').parent().width(), 800);
+        width = wMax - margin.left - margin.right;
+        height = 270 - margin.top - margin.bottom;
+        // Set the ranges of the graph based on the size of the
+        // space we will be displaying in.
+        x = d3.scaleLinear().range([0, width]);
+        y = d3.scaleLinear().range([height, 0]);
+
+        // Define the fill area function, which computes the space under a curve
+        // by drawing from the x axis to the curve
+        area = d3.area()
+            .x((d, i) => { return x(i * (currentDistance / sampleSize)); })
+            .y0(height)
+            .y1((d) => { return y(d.elevation); });
+
+        // Define the line function which generates our aforementioned curve 
+        valueline = d3.line()
+            .x((d, i) => { return x(i * (currentDistance / sampleSize)); })
+            .y((d) => { return y(d.elevation); });
+
+
+        if (!isInitialized && svg === undefined) {
+
+            // Adds the svg canvas on which we will be drawing the graph
+            svg = d3.select("#graph-container")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")");
+        } else {
+
+            svg.select('svg')
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .selectAll("g")
+                .attr("transform",
+                    "translate(" + margin.left + "," + margin.top + ")");
+
+            // text label for the x axis
+            svg.select(".x.axis-label")
+                .attr("x", width / 2)
+                .attr("y", height + margin.top);
+
+            // text label for the y axis
+            svg.select(".y.axis-label")
+                .attr("y", 0 - margin.left + 10)
+                .attr("x", 0 - (height / 2));
+
+                updateElevation();
+        }
+    }
+
+
+
+
 
 
     ///// RUNTIME FUNCTIONS
@@ -384,7 +416,13 @@ const App = (() => {
     // creates our graph
     const initGraph = (data) => {
 
-        isInitialized = true;
+        resetD3(data);
+
+        if (!isInitialized) {
+            $(window).resize(resetD3);
+            isInitialized = true;
+        }
+
 
         // this creates an enumerated scale of colors 
         // that interpolates between the two specified
@@ -435,7 +473,7 @@ const App = (() => {
             .attr("x", width / 2)
             .attr("y", height + margin.top)
             .style("text-anchor", "middle")
-            .attr("class", "axis-label")
+            .attr("class", "x axis-label")
             .text("Distance (meters)");
 
         // Add the Y Axis
@@ -450,7 +488,7 @@ const App = (() => {
             .attr("x", 0 - (height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .attr("class", "axis-label")
+            .attr("class", "y axis-label")
             .text("Elevation (meters)");
 
         // add the Y gridlines

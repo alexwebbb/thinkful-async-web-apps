@@ -203,6 +203,7 @@ const App = (() => {
 
 
     const resetD3 = function() {
+        d3.select("svg").selectAll("*").remove();
         d3.select("svg").remove();
 
 
