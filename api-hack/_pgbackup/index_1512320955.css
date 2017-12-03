@@ -3,31 +3,29 @@ html {
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
     color: darkslategray;
+
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e4f5fc+0,9fd8ef+75,bfe8f9+81,2ab0ed+100 */
+    background: rgb(228,245,252);
+
+    /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(228,245,252,1) 0%, rgba(159,216,239,1) 75%, rgba(191,232,249,1) 81%, rgba(42,176,237,1) 100%);
+
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(228,245,252,1) 0%,rgba(159,216,239,1) 75%,rgba(191,232,249,1) 81%,rgba(42,176,237,1) 100%);
+
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(228,245,252,1) 0%,rgba(159,216,239,1) 75%,rgba(191,232,249,1) 81%,rgba(42,176,237,1) 100%);
+
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e4f5fc', endColorstr='#2ab0ed',GradientType=0 );
+
+    /* IE6-9 */
 }
 
 *,
 *:before,
 *:after {
     box-sizing: inherit;
-}
-
-body {
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e2ffed+4,f7fffa+39,f7fffa+75,e4f5fc+80,9fd8ef+82,bfe8f9+87,2ab0ed+100 */
-    background: rgb(226,255,237);
-
-    /* Old browsers */
-    background: -moz-linear-gradient(top,  rgba(226,255,237,1) 4%, rgba(247,255,250,1) 39%, rgba(247,255,250,1) 75%, rgba(228,245,252,1) 80%, rgba(159,216,239,1) 82%, rgba(191,232,249,1) 87%, rgba(42,176,237,1) 100%);
-
-    /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  rgba(226,255,237,1) 4%,rgba(247,255,250,1) 39%,rgba(247,255,250,1) 75%,rgba(228,245,252,1) 80%,rgba(159,216,239,1) 82%,rgba(191,232,249,1) 87%,rgba(42,176,237,1) 100%);
-
-    /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  rgba(226,255,237,1) 4%,rgba(247,255,250,1) 39%,rgba(247,255,250,1) 75%,rgba(228,245,252,1) 80%,rgba(159,216,239,1) 82%,rgba(191,232,249,1) 87%,rgba(42,176,237,1) 100%);
-
-    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2ffed', endColorstr='#2ab0ed',GradientType=0 );
-
-    /* IE6-9 */
 }
 
 h1,
@@ -100,8 +98,4 @@ h1,
 .footer-text {
     font-size: 16px;
     color: dodgerblue;
-}
-
-.title-text-nav {
-    text-shadow: 2px 2px 1px white;
 }
