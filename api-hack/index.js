@@ -19,9 +19,11 @@ const App = (() => {
     // of ajax requests from the google API, aside
     // from the elevation data result itself.
     const rowNum = 5,
-        sampleSize = 30;
-    let rowLoadCount, rectangle,
-        map, elevator, boxImage, boxMarker;
+        sampleSize = 30,
+        iconStrings = ['rot0.png', 'rot90.png', 'rot180.png', 'rot270.png'],
+        center = { lat: 43.85, lng: -79.03 };
+    let rowLoadCount, rectangle, icons,
+        map, elevator, boxMarker;
 
 
     ///// GOOGLE MAPS FUNCTION SECTION 
@@ -120,7 +122,7 @@ const App = (() => {
     }
 
 
-    const CenterControl = function(controlDiv, map) {
+    const CenterControl = (controlDiv, map) => {
 
         // Set CSS for the control border.
         let controlUI = document.createElement('div');
@@ -131,7 +133,7 @@ const App = (() => {
         controlUI.style.cursor = 'pointer';
         controlUI.style.marginBottom = '22px';
         controlUI.style.textAlign = 'center';
-        controlUI.title = 'Click to recenter the map';
+        controlUI.title = 'Click to rotate the graph view';
         controlDiv.appendChild(controlUI);
 
         // Set CSS for the control interior.
@@ -148,7 +150,7 @@ const App = (() => {
         // Setup the click event listeners: simply set the map to Chicago.
         controlUI.addEventListener('click', function() {
             currentRotation = (currentRotation + 1) % 4;
-            console.log(currentRotation);
+            boxMarker.setIcon(icons[currentRotation]);
             updateElevation();
         });
 
@@ -205,7 +207,7 @@ const App = (() => {
 
         // create our map instance
         map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 44.5452, lng: -78.5389 },
+            center: center,
             zoom: 9
         });
 
@@ -215,10 +217,10 @@ const App = (() => {
 
         // our initial bounds on page load
         const b = {
-            north: 44.599,
-            south: 44.490,
-            east: -78.443,
-            west: -78.649
+            north: 44.025138001587756,
+            south: 43.65531331667984,
+            east: -78.75061718749998,
+            west: -79.29444677734375
         };
 
         // Create an instance of the draggable rectangle
@@ -233,20 +235,23 @@ const App = (() => {
         // place our rectangle on the map we already created
         rectangle.setMap(map);
 
-        // create an object which holds the characteristics
-        // of our marker icon
-        boxImage = {
-            url: 'box.png',
-            scaledSize: new google.maps.Size(30, 30),
-            anchor: new google.maps.Point(15, 15)
-        }
+        // construct sprite style array of  pre-rotated marker 
+        // icons to be swapped when rotating the query direction
+        icons = iconStrings.reduce((a, c) => {
+            a.push({
+                url: c,
+                scaledSize: new google.maps.Size(40, 40),
+                anchor: new google.maps.Point(20, 20)
+            });
+            return a;
+        }, []);
 
         // create an instance of our marker icon and place 
         // it in the center of our initial bounding box
         boxMarker = new google.maps.Marker({
             position: getCenter(b),
             map: map,
-            icon: boxImage
+            icon: icons[0]
         });
 
 
@@ -260,13 +265,13 @@ const App = (() => {
 
         // Create the DIV to hold the control and call the CenterControl()
         // constructor passing in this DIV.
-        let centerControlDiv = document.createElement('div'),
+        const centerControlDiv = document.createElement('div'),
             centerControl = new CenterControl(centerControlDiv, map);
 
         centerControlDiv.index = 1;
-        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+        map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centerControlDiv);
 
-
+        updateElevation();
     }
 
     // this function sets the position of the icon each 
