@@ -147,6 +147,7 @@ const App = (() => {
 
     // These are constructors that 
     // are called during the map init
+    
     // left rotation button. 
     const CenterControlLeft = function(controlDiv, map) {
 
@@ -208,7 +209,7 @@ const App = (() => {
 
 
     ///// D3 FUNCTION AREA 
-    // -> pure functions using native D3 classes
+    // -> ie, pure functions using native D3 classes
 
 
     // (re)Sets our initial variables, including 
