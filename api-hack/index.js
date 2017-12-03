@@ -121,35 +121,69 @@ const App = (() => {
         return path;
     }
 
+    const setCenterControlCss = (controlUI, controlText) => {
 
-    const CenterControl = (controlDiv, map) => {
-
-        // Set CSS for the control border.
-        let controlUI = document.createElement('div');
         controlUI.style.backgroundColor = '#fff';
         controlUI.style.border = '2px solid #fff';
         controlUI.style.borderRadius = '3px';
         controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
         controlUI.style.cursor = 'pointer';
         controlUI.style.marginBottom = '22px';
+        controlUI.style.marginLeft = '10px';
+        controlUI.style.marginRight = '10px';
         controlUI.style.textAlign = 'center';
-        controlUI.title = 'Click to rotate the graph view';
-        controlDiv.appendChild(controlUI);
 
-        // Set CSS for the control interior.
-        let controlText = document.createElement('div');
         controlText.style.color = 'rgb(25,25,25)';
         controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
         controlText.style.fontSize = '16px';
         controlText.style.lineHeight = '38px';
         controlText.style.paddingLeft = '5px';
         controlText.style.paddingRight = '5px';
-        controlText.innerHTML = 'Rotate View';
+
+    }
+
+    const CenterControlLeft = function(controlDiv, map) {
+
+        let controlUI = document.createElement('div');
+        let controlText = document.createElement('div');
+
+        // Set CSS for the control border and control interior.
+        setCenterControlCss(controlUI, controlText);
+        // Set CSS for the .
+
+        controlUI.title = 'Click to rotate the graph view to the left';
+        controlDiv.appendChild(controlUI);
+
+        controlText.innerHTML = 'Rotate Left';
         controlUI.appendChild(controlText);
 
         // Setup the click event listeners: simply set the map to Chicago.
         controlUI.addEventListener('click', function() {
             currentRotation = (currentRotation + 1) % 4;
+            boxMarker.setIcon(icons[currentRotation]);
+            updateElevation();
+        });
+
+    }
+
+    const CenterControlRight = function(controlDiv, map) {
+
+        let controlUI = document.createElement('div');
+        let controlText = document.createElement('div');
+
+        // Set CSS for the control border and control interior.
+        setCenterControlCss(controlUI, controlText);
+        // Set CSS for the .
+
+        controlUI.title = 'Click to rotate the graph view to the right';
+        controlDiv.appendChild(controlUI);
+
+        controlText.innerHTML = 'Rotate Right';
+        controlUI.appendChild(controlText);
+
+        // Setup the click event listeners: simply set the map to Chicago.
+        controlUI.addEventListener('click', function() {
+            currentRotation = (currentRotation + 3) % 4;
             boxMarker.setIcon(icons[currentRotation]);
             updateElevation();
         });
@@ -162,7 +196,8 @@ const App = (() => {
 
     // Set the dimensions of the canvas / graph
     const margin = { top: 30, right: 20, bottom: 50, left: 70 },
-        width = 600 - margin.left - margin.right,
+        wMax = Math.min($('#graph-container').parent().width(), 800),
+        width = wMax - margin.left - margin.right,
         height = 270 - margin.top - margin.bottom,
         // Set the ranges of the graph based on the size of the
         // space we will be displaying in.
@@ -265,11 +300,25 @@ const App = (() => {
 
         // Create the DIV to hold the control and call the CenterControl()
         // constructor passing in this DIV.
-        const centerControlDiv = document.createElement('div'),
-            centerControl = new CenterControl(centerControlDiv, map);
+        const centerControlLeftDiv = document.createElement('div'),
+            centerControlLeft = new CenterControlLeft(centerControlLeftDiv, map),
+            centerControlRightDiv = document.createElement('div'),
+            centerControlRight = new CenterControlRight(centerControlRightDiv, map);
 
-        centerControlDiv.index = 1;
-        map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centerControlDiv);
+        centerControlLeftDiv.index = 1;
+        centerControlRightDiv.index = 1;
+
+
+        if ($(window).width() > 1024) {
+
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlLeftDiv);
+            map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(centerControlRightDiv);
+        } else {
+
+            map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(centerControlLeftDiv);
+            map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(centerControlRightDiv);
+        }
+
 
         updateElevation();
     }

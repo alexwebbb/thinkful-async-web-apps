@@ -1,5 +1,4 @@
 /* inherit box sizing */
-
 html {
     box-sizing: border-box;
 }
@@ -10,23 +9,15 @@ html {
     box-sizing: inherit;
 }
 
-
-
 /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
-
 #map-container {
-    height: 270px;
-}
-
-@media (min-width: 800px) {
-    #map-container {
-        height: 420px;
-    }
+    min-width: 600px;
+    height: 500px;
 }
 
 #graph-container {
-    height: 300px;
+    min-width: 600px;
 }
 
 #map {
@@ -69,4 +60,6 @@ html {
     stroke-width: 0;
 }
 
-#graph-container {}
+#graph-container {
+    width: 600px;
+}
