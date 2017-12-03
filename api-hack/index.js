@@ -194,6 +194,8 @@ const App = (() => {
 
     ///// D3 VARIABLE SECTION
 
+    const titles = ['Northern View', 'Eastern View', 'Southern View', 'Western View'];
+
     // Set the dimensions of the canvas / graph
     let margin, wMax, width, height, x, y, colorScale, area, valueline, svg;
 
@@ -255,7 +257,12 @@ const App = (() => {
                 .attr("y", 0 - margin.left + 10)
                 .attr("x", 0 - (height / 2));
 
-                updateElevation();
+            // add a title
+            svg.select("#graph-title")
+                .attr("x", (width / 2))
+                .attr("y", 0 - (margin.top / 2));
+
+            updateElevation();
         }
     }
 
@@ -497,7 +504,17 @@ const App = (() => {
             .call(d3.axisLeft(y)
                 .tickSize(-width)
                 .tickFormat("")
-            )
+            );
+
+        // add a title
+        svg.append("text")
+            .attr("id", "graph-title")
+            .attr("x", (width / 2))
+            .attr("y", 0 - (margin.top / 2))
+            .attr("text-anchor", "middle")
+            .style("font-size", "20px")
+            .style("text-decoration", "underline")
+            .text(titles[0]);
     }
 
     // updates the state of the graph
@@ -548,6 +565,10 @@ const App = (() => {
             .call(d3.axisLeft(y)
                 .tickSize(-width)
                 .tickFormat(""));
+
+        // add a title
+        svg.select("text#graph-title")
+            .text(titles[currentRotation]);
     }
 
     return {
