@@ -1,3 +1,5 @@
+/* eslint-env jquery */
+/* global d3, google */
 'use strict';
 
 const App = (() => {
@@ -31,20 +33,20 @@ const App = (() => {
 
     // generic spherical distance function
     // from http://www.geodatasource.com/developers/javascript
-    const distance = (lat1, lon1, lat2, lon2, unit = "K") => {
+    const distance = (lat1, lon1, lat2, lon2, unit = 'K') => {
         const radlat1 = Math.PI * lat1 / 180,
             radlat2 = Math.PI * lat2 / 180,
             theta = lon1 - lon2,
             radtheta = Math.PI * theta / 180;
         let dist = Math.sin(radlat1) * Math.sin(radlat2) +
             Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-        dist = Math.acos(dist)
-        dist = dist * 180 / Math.PI
-        dist = dist * 60 * 1.1515
-        if (unit == "K") { dist = dist * 1.609344 }
-        if (unit == "N") { dist = dist * 0.8684 }
+        dist = Math.acos(dist);
+        dist = dist * 180 / Math.PI;
+        dist = dist * 60 * 1.1515;
+        if (unit == 'K') { dist = dist * 1.609344; }
+        if (unit == 'N') { dist = dist * 0.8684; }
         return dist;
-    }
+    };
 
     // shorthand function which returns the 
     // current bounds of the google maps rect
@@ -55,7 +57,7 @@ const App = (() => {
             south: rectangle.getBounds().getSouthWest().lat(),
             east: rectangle.getBounds().getNorthEast().lng()
         };
-    }
+    };
 
     // get the center of an arbitrary rect, 
     // using the format from above
@@ -64,7 +66,7 @@ const App = (() => {
             lat: bounds.north - ((bounds.north - bounds.south) / 2),
             lng: bounds.east - ((bounds.east - bounds.west) / 2)
         };
-    }
+    };
 
     // construct path using the nDistance value
     // nDistance stands for negative distance.
@@ -119,7 +121,7 @@ const App = (() => {
         }
 
         return path;
-    }
+    };
 
 
     // helper function that sets the 
@@ -143,13 +145,13 @@ const App = (() => {
         controlText.style.paddingLeft = '5px';
         controlText.style.paddingRight = '5px';
 
-    }
+    };
 
     // These are constructors that 
     // are called during the map init
 
     // left rotation button. 
-    const CenterControlLeft = function(controlDiv, map) {
+    const CenterControlLeft = function(controlDiv) {
 
         let controlUI = document.createElement('div');
         let controlText = document.createElement('div');
@@ -171,10 +173,10 @@ const App = (() => {
             updateElevation();
         });
 
-    }
+    };
 
     // right rotation button
-    const CenterControlRight = function(controlDiv, map) {
+    const CenterControlRight = function(controlDiv) {
 
         let controlUI = document.createElement('div');
         let controlText = document.createElement('div');
@@ -196,7 +198,7 @@ const App = (() => {
             updateElevation();
         });
 
-    }
+    };
 
 
 
@@ -216,7 +218,7 @@ const App = (() => {
     // checking the size of the window.
     // In addition, it updates the position of 
     // the axes labels when the window is resized
-    const resetD3 = function(data) {
+    const resetD3 = function() {
 
         margin = { top: 30, right: 20, bottom: 50, left: 70 };
         wMax = Math.min($('#graph-container').parent().width(), 800);
@@ -243,44 +245,44 @@ const App = (() => {
         if (!isInitialized && svg === undefined) {
 
             // Adds the svg canvas on which we will be drawing the graph
-            svg = d3.select("#graph-container")
-                .append("svg")
-                .attr("role", "img")
-                .attr("aria-label", "Graph of elevation data from google API")
-                .attr("title", "Graph of elevation data from google API")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                .attr("transform",
-                    "translate(" + margin.left + "," + margin.top + ")");
+            svg = d3.select('#graph-container')
+                .append('svg')
+                .attr('role', 'img')
+                .attr('aria-label', 'Graph of elevation data from google API')
+                .attr('title', 'Graph of elevation data from google API')
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .append('g')
+                .attr('transform',
+                    'translate(' + margin.left + ',' + margin.top + ')');
         } else {
 
             // set the dimensions of the svg and position
             svg.select('svg')
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .selectAll("g")
-                .attr("transform",
-                    "translate(" + margin.left + "," + margin.top + ")");
+                .attr('width', width + margin.left + margin.right)
+                .attr('height', height + margin.top + margin.bottom)
+                .selectAll('g')
+                .attr('transform',
+                    'translate(' + margin.left + ',' + margin.top + ')');
 
             // text label for the x axis
-            svg.select(".x.axis-label")
-                .attr("x", width / 2)
-                .attr("y", height + margin.top);
+            svg.select('.x.axis-label')
+                .attr('x', width / 2)
+                .attr('y', height + margin.top);
 
             // text label for the y axis
-            svg.select(".y.axis-label")
-                .attr("y", 0 - margin.left + 10)
-                .attr("x", 0 - (height / 2));
+            svg.select('.y.axis-label')
+                .attr('y', 0 - margin.left + 10)
+                .attr('x', 0 - (height / 2));
 
             // add a title
-            svg.select("#graph-title")
-                .attr("x", (width / 2))
-                .attr("y", 0 - (margin.top / 2));
+            svg.select('#graph-title')
+                .attr('x', (width / 2))
+                .attr('y', 0 - (margin.top / 2));
 
             updateElevation();
         }
-    }
+    };
 
 
 
@@ -355,9 +357,11 @@ const App = (() => {
 
         // create the div and then the button itself
         const centerControlLeftDiv = document.createElement('div'),
-            centerControlLeft = new CenterControlLeft(centerControlLeftDiv, map),
-            centerControlRightDiv = document.createElement('div'),
-            centerControlRight = new CenterControlRight(centerControlRightDiv, map);
+            centerControlRightDiv = document.createElement('div');
+
+        // call the constructor for our created elements    
+        new CenterControlLeft(centerControlLeftDiv, map);
+        new CenterControlRight(centerControlRightDiv, map);
 
         // ehh should take a look at this later
         centerControlLeftDiv.index = 1;
@@ -378,21 +382,21 @@ const App = (() => {
 
         // go ahead get data
         updateElevation();
-    }
+    };
 
     // this function sets the position of the icon each 
     // frame that the position or bounds of the rect change
-    const setIconPosition = (event) => {
+    const setIconPosition = () => {
 
         const b = getRectBounds(),
             center = getCenter(b);
 
         boxMarker.setPosition(center);
-    }
+    };
 
     // here is where the ajax request for 
     // our elevation data is performed
-    const updateElevation = (event) => {
+    const updateElevation = () => {
 
         const b = getRectBounds(),
             // our interval is the discrete distance 
@@ -434,7 +438,7 @@ const App = (() => {
                 }
             });
         }
-    }
+    };
 
 
     ///// D3 RUNTIME
@@ -453,7 +457,7 @@ const App = (() => {
 
         // this creates an enumerated scale of colors 
         // that interpolates between the two specified
-        colorScale = d3.interpolateRgb("blue", "red");
+        colorScale = d3.interpolateRgb('blue', 'red');
 
         // flattens our 3d array into a 2d array 
         // so that our domain function can consider it
@@ -474,68 +478,68 @@ const App = (() => {
         for (let i = 0; i < data.length; i++) {
 
             // add the area. d3 always draws on top, so draw order matters
-            svg.append("path")
+            svg.append('path')
                 .data([data[i]])
-                .attr("class", `area area${i + 1}`)
-                .style("fill", `${colorScale((i + 1) / data.length)}`)
-                .attr("d", area(data[i]));
+                .attr('class', `area area${i + 1}`)
+                .style('fill', `${colorScale((i + 1) / data.length)}`)
+                .attr('d', area(data[i]));
 
             // now we can add the line, which sits on top of the filled area
-            svg.append("path")
+            svg.append('path')
                 .data([data[i]])
-                .attr("class", `line line${i + 1}`)
-                .style("stroke", `${colorScale((i + 1) / data.length)}`)
-                .attr("d", valueline(data[i]));
+                .attr('class', `line line${i + 1}`)
+                .style('stroke', `${colorScale((i + 1) / data.length)}`)
+                .attr('d', valueline(data[i]));
         }
 
         // Add the X Axis
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
+        svg.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0,' + height + ')')
             .call(d3.axisBottom(x));
 
 
         // text label for the x axis
-        svg.append("text")
-            .attr("x", width / 2)
-            .attr("y", height + margin.top)
-            .style("text-anchor", "middle")
-            .attr("class", "x axis-label")
-            .text("Distance (meters)");
+        svg.append('text')
+            .attr('x', width / 2)
+            .attr('y', height + margin.top)
+            .style('text-anchor', 'middle')
+            .attr('class', 'x axis-label')
+            .text('Distance (meters)');
 
         // Add the Y Axis
-        svg.append("g")
-            .attr("class", "y axis")
+        svg.append('g')
+            .attr('class', 'y axis')
             .call(d3.axisLeft(y));
 
         // text label for the y axis
-        svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left + 10)
-            .attr("x", 0 - (height / 2))
-            .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .attr("class", "y axis-label")
-            .text("Elevation (meters)");
+        svg.append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', 0 - margin.left + 10)
+            .attr('x', 0 - (height / 2))
+            .attr('dy', '1em')
+            .style('text-anchor', 'middle')
+            .attr('class', 'y axis-label')
+            .text('Elevation (meters)');
 
         // add the Y gridlines
-        svg.append("g")
-            .attr("class", "grid")
+        svg.append('g')
+            .attr('class', 'grid')
             .call(d3.axisLeft(y)
                 .tickSize(-width)
-                .tickFormat("")
+                .tickFormat('')
             );
 
         // add a title
-        svg.append("text")
-            .attr("id", "graph-title")
-            .attr("x", (width / 2))
-            .attr("y", 0 - (margin.top / 2))
-            .attr("text-anchor", "middle")
-            .style("font-size", "20px")
-            .style("text-decoration", "underline")
+        svg.append('text')
+            .attr('id', 'graph-title')
+            .attr('x', (width / 2))
+            .attr('y', 0 - (margin.top / 2))
+            .attr('text-anchor', 'middle')
+            .style('font-size', '20px')
+            .style('text-decoration', 'underline')
             .text(titles[0]);
-    }
+    };
 
     // updates the state of the graph
     const updateGraph = (data) => {
@@ -552,7 +556,7 @@ const App = (() => {
         ]);
 
         // grab our prexisiting graph
-        let svg = d3.select("#graph-container").transition();
+        let svg = d3.select('#graph-container').transition();
 
         // loop through our existing elements and 
         // update them based on the current data state
@@ -561,39 +565,39 @@ const App = (() => {
             // update fill area
             svg.select(`.area${i + 1}`)
                 .duration(750)
-                .attr("d", area(data[i]));
+                .attr('d', area(data[i]));
 
             // update our line
             svg.select(`.line${i + 1}`)
                 .duration(750)
-                .attr("d", valueline(data[i]));
+                .attr('d', valueline(data[i]));
         }
 
         // Add the X Axis
-        svg.select(".x.axis")
+        svg.select('.x.axis')
             .duration(750)
             .call(d3.axisBottom(x));
 
         // Add the Y Axis
-        svg.select(".y.axis")
+        svg.select('.y.axis')
             .duration(750)
             .call(d3.axisLeft(y));
 
         // update our grid lines
-        svg.select(".grid")
+        svg.select('.grid')
             .duration(750)
             .call(d3.axisLeft(y)
                 .tickSize(-width)
-                .tickFormat(""));
+                .tickFormat(''));
 
         // add a title
-        svg.select("text#graph-title")
+        svg.select('text#graph-title')
             .text(titles[currentRotation]);
-    }
+    };
 
     return {
         initMap: initMap
-    }
+    };
 
 })();
 
