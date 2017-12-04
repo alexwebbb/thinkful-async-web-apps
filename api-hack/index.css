@@ -31,7 +31,7 @@ body {
     /* IE6-9 */
 }
 
-h1,
+h1, h2,
 #graph-title {
     font-family: 'Raleway', sans-serif;
 }

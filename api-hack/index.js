@@ -147,7 +147,7 @@ const App = (() => {
 
     // These are constructors that 
     // are called during the map init
-    
+
     // left rotation button. 
     const CenterControlLeft = function(controlDiv, map) {
 
@@ -245,6 +245,9 @@ const App = (() => {
             // Adds the svg canvas on which we will be drawing the graph
             svg = d3.select("#graph-container")
                 .append("svg")
+                .attr("role", "img")
+                .attr("aria-label", "Graph of elevation data from google API")
+                .attr("title", "Graph of elevation data from google API")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
@@ -252,6 +255,7 @@ const App = (() => {
                     "translate(" + margin.left + "," + margin.top + ")");
         } else {
 
+            // set the dimensions of the svg and position
             svg.select('svg')
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)

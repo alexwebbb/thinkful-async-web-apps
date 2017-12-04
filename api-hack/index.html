@@ -1,49 +1,51 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" name="description" 
-        content="Crawl along the surface of the Earth with Earthworm and the Google Elevation API!">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Earthworm</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-        <link href="https://fonts.googleapis.com/css?family=Raleway:300|Roboto:300" rel="stylesheet">
-        <link rel="icon" href="favicon.ico" type="image/ico"/>
-        <link rel="stylesheet" href="index.css">
-    </head>
-    <body>
-        <!-- Image and text -->
-        <div class="mw-100 container">
-            <nav class="navbar navbar-light bg-faded bg-secondary">
-                <a class="navbar-brand" href="#">
-                    <img src="logo.svg" width="100" height="100%" class="d-inline-block align-middle" alt="Earthworm Logo">
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" name="description" content="Crawl along the surface of the Earth with Earthworm and the Google Elevation API!">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Earthworm</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300|Roboto:300" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/ico" />
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <!-- Image and text -->
+    <div class="mw-100 container">
+        <header class="navbar navbar-light bg-faded bg-secondary">
+            <a class="navbar-brand" href="#">
+                    <img src="logo.svg" width="100" height="100%" class="d-inline-block align-middle" alt="Earthworm Logo" title="Earthworm Logo">
                     <h1 class="d-inline-block align-bottom title-text-nav">
                     Earthworm </h1>
                 </a>
-            </nav>
-            <div class="row no-gutters">
-                <div class="col-md-12 pb-2">
-                    <section id="map-container">
-                        <div id="map"></div>
-                    </section>
+        </header>
+        <main class="row no-gutters">
+            <section class="col-md-12 pb-2">
+                <div id="map-container">
+                    <div id="map"></div>
                 </div>
-                <div class="col-md-4">
-                    <h1 class="description-title">Try Dragging the Box</h1>
-                    <p><img src="legend.png" width="80" class="d-inline-block align-middle float-right" alt="Earthworm Logo" height="130">Earthworm is a visualization of Google's Elevation API utilizing D3. <b>Each time you drag the box, the view on the graph will update.</b> The view is constructed by making a series of path requests to the Elevation API perpendicular to the plane of the graph. Earthworm "crawls" along the surface of the earth. <b>Try clicking the rotate buttons.</b></p>
+            </section>
+            <section class="col-md-4">
+                <h2 class="description-title">Try Dragging the Box</h2>
+                <p><img src="legend.png" width="80" class="d-inline-block align-middle float-right" alt="Legend for the graph. Blue is the background color, and red is the foreground color." title="Legend for the graph. Blue is the background color, and red is the foreground color." height="130">Earthworm is a visualization of Google's Elevation API utilizing D3. <b>Each time you drag the box, the view on the graph will update.</b> The view is constructed by making a series of path requests to the Elevation API perpendicular to the plane of the graph. Earthworm "crawls" along the surface of the earth. <b>Try clicking the rotate buttons.</b></p>
+            </section>
+            <section class="col-md-8">
+                <div id="graph-container">
                 </div>
-                <div class="col-md-8">
-                    <section id="graph-container">
-</section>
-                </div>
-                <footer class="col-md-12">
-                    <h1 class="text-center footer-text">Alex Webb 2017</h1>
-                </footer>
-            </div>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-        <script src="https://d3js.org/d3.v4.min.js"></script>
-        <script src="index.js"></script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBzNhfut8u9Ok-mhwOtVvKFYVHgCxyEzE&callback=init"></script>
-    </body>
+            </section>
+            <footer class="col-md-12">
+                <h1 class="text-center footer-text">Alex Webb 2017</h1>
+            </footer>
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="index.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBzNhfut8u9Ok-mhwOtVvKFYVHgCxyEzE&callback=init"></script>
+</body>
+
 </html>
