@@ -7,8 +7,13 @@ Earthworm is a visualization of Google's Elevation API utilizing D3. Each time y
 ##Tech Used
 
 +HTML
+
 +CSS
+
 +JavaScript
+
 +jQuery
+
 +Bootstrap
+
 +D3
