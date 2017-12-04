@@ -5,6 +5,7 @@ Earthworm is a visualization of Google's Elevation API utilizing D3. Each time y
 ![A view of the website utilizing a large view](http://res.cloudinary.com/execool/image/upload/v1512385296/earthworm/readme-img.png "The Website in Action")
 
 ##Tech Used
+
 +HTML
 +CSS
 +JavaScript
